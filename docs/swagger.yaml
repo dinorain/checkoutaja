@@ -1,0 +1,300 @@
+definitions:
+  dto.FindUserResponseDto:
+    properties:
+      data: {}
+      meta:
+        $ref: '#/definitions/utils.PaginationMetaDto'
+    type: object
+  dto.LoginRequestDto:
+    properties:
+      email:
+        maxLength: 60
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  dto.LoginResponseDto:
+    properties:
+      tokens:
+        $ref: '#/definitions/dto.RefreshTokenResponseDto'
+      user_id:
+        type: string
+    required:
+    - tokens
+    - user_id
+    type: object
+  dto.RefreshTokenDto:
+    properties:
+      refresh_token:
+        type: string
+    required:
+    - refresh_token
+    type: object
+  dto.RefreshTokenResponseDto:
+    properties:
+      access_token:
+        type: string
+      refresh_token:
+        type: string
+    required:
+    - access_token
+    - refresh_token
+    type: object
+  dto.RegisterRequestDto:
+    properties:
+      avatar:
+        type: string
+      email:
+        maxLength: 60
+        type: string
+      first_name:
+        maxLength: 30
+        type: string
+      last_name:
+        maxLength: 30
+        type: string
+      password:
+        type: string
+      role:
+        type: string
+    required:
+    - email
+    - first_name
+    - last_name
+    - password
+    - role
+    type: object
+  dto.RegisterResponseDto:
+    properties:
+      user_id:
+        type: string
+    required:
+    - user_id
+    type: object
+  dto.UserResponseDto:
+    properties:
+      avatar:
+        type: string
+      created_at:
+        type: string
+      email:
+        type: string
+      first_name:
+        type: string
+      last_name:
+        type: string
+      role:
+        type: string
+      updated_at:
+        type: string
+      user_id:
+        type: string
+    type: object
+  utils.PaginationMetaDto:
+    properties:
+      limit:
+        type: integer
+      offset:
+        type: integer
+      page:
+        type: integer
+    type: object
+info:
+  contact:
+    email: djourdan555@gmail.com
+    name: Dustin Jourdan
+    url: https://github.com/dinorain
+paths:
+  /user:
+    get:
+      consumes:
+      - application/json
+      description: Find all users, admin only
+      parameters:
+      - description: pagination size
+        in: query
+        name: size
+        type: string
+      - description: pagination page
+        in: query
+        name: page
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.FindUserResponseDto'
+      security:
+      - ApiKeyAuth: []
+      summary: Find all users
+      tags:
+      - Users
+    post:
+      consumes:
+      - application/json
+      description: To create user, admin only
+      parameters:
+      - description: Payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/dto.RegisterRequestDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.RegisterResponseDto'
+      security:
+      - ApiKeyAuth: []
+      summary: To register user
+      tags:
+      - Users
+  /user/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete existing user
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      security:
+      - ApiKeyAuth: []
+      summary: Delete user
+      tags:
+      - Users
+    get:
+      consumes:
+      - application/json
+      description: Find existing user by id
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.UserResponseDto'
+      security:
+      - ApiKeyAuth: []
+      summary: Find user
+      tags:
+      - Users
+    put:
+      consumes:
+      - application/json
+      description: Update existing user
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.UserResponseDto'
+      security:
+      - ApiKeyAuth: []
+      summary: Update user
+      tags:
+      - Users
+  /user/login:
+    post:
+      consumes:
+      - application/json
+      description: User login with email and password
+      parameters:
+      - description: Payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/dto.LoginRequestDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.LoginResponseDto'
+      summary: User login
+      tags:
+      - Users
+  /user/logout:
+    post:
+      consumes:
+      - application/json
+      description: Delete current session
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      security:
+      - ApiKeyAuth: []
+      summary: User logout
+      tags:
+      - Users
+  /user/me:
+    get:
+      consumes:
+      - application/json
+      description: Get session id from token, find user by uuid and returns it
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.UserResponseDto'
+      security:
+      - ApiKeyAuth: []
+      summary: Find me
+      tags:
+      - Users
+  /user/refresh:
+    post:
+      consumes:
+      - application/json
+      description: Refresh access token
+      parameters:
+      - description: Payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/dto.RefreshTokenDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.RefreshTokenResponseDto'
+      summary: Refresh access token
+      tags:
+      - Users
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
