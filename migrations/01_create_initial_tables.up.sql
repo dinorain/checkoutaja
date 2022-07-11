@@ -53,7 +53,7 @@ CREATE TABLE orders
     order_id    SERIAL PRIMARY KEY,
     user_id     INTEGER REFERENCES users (user_id),
     seller_id   INTEGER REFERENCES sellers (seller_id),
-    items       JSONB,
+    item        JSONB,
     quantity    NUMERIC       NOT NULL,
     price       NUMERIC       NOT NULL,
     total_price NUMERIC       NOT NULL,

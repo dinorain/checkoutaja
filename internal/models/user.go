@@ -16,15 +16,16 @@ const (
 
 // User model
 type User struct {
-	UserID    uuid.UUID `json:"user_id" db:"user_id" validate:"omitempty"`
-	Email     string    `json:"email" db:"email" validate:"omitempty,lte=60,email"`
-	FirstName string    `json:"first_name" db:"first_name" validate:"required,lte=30"`
-	LastName  string    `json:"last_name" db:"last_name" validate:"required,lte=30"`
-	Role      string    `json:"role" db:"role" validate:"required"`
-	Avatar    *string   `json:"avatar" db:"avatar"`
-	Password  string    `json:"-" db:"password"`
-	CreatedAt time.Time `json:"created_at,omitempty" db:"created_at"`
-	UpdatedAt time.Time `json:"updated_at,omitempty" db:"updated_at"`
+	UserID          uuid.UUID `json:"user_id" db:"user_id" validate:"omitempty"`
+	Email           string    `json:"email" db:"email" validate:"omitempty,lte=60,email"`
+	FirstName       string    `json:"first_name" db:"first_name" validate:"required,lte=30"`
+	LastName        string    `json:"last_name" db:"last_name" validate:"required,lte=30"`
+	DeliveryAddress string    `json:"delivery_address" db:"delivery_address" validate:"required,lte=250"`
+	Role            string    `json:"role" db:"role" validate:"required"`
+	Avatar          *string   `json:"avatar" db:"avatar"`
+	Password        string    `json:"-" db:"password"`
+	CreatedAt       time.Time `json:"created_at,omitempty" db:"created_at"`
+	UpdatedAt       time.Time `json:"updated_at,omitempty" db:"updated_at"`
 }
 
 func (u *User) SanitizePassword() {
@@ -47,6 +48,7 @@ func (u *User) ComparePasswords(password string) error {
 func (u *User) PrepareCreate() error {
 	u.Email = strings.ToLower(strings.TrimSpace(u.Email))
 	u.Password = strings.TrimSpace(u.Password)
+	u.DeliveryAddress = strings.TrimSpace(u.DeliveryAddress)
 
 	if err := u.HashPassword(); err != nil {
 		return err
