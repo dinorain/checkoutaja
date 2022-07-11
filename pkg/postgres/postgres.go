@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/dinorain/useraja/config"
+	"github.com/dinorain/checkoutaja/config"
 
 	_ "github.com/lib/pq"
 	"github.com/jmoiron/sqlx"

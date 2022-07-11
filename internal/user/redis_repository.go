@@ -4,7 +4,7 @@ package user
 import (
 	"context"
 
-	"github.com/dinorain/useraja/internal/models"
+	"github.com/dinorain/checkoutaja/internal/models"
 )
 
 // Auth Redis repository interface

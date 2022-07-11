@@ -10,10 +10,10 @@ import (
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/require"
 
-	"github.com/dinorain/useraja/config"
-	"github.com/dinorain/useraja/internal/models"
-	"github.com/dinorain/useraja/internal/user/mock"
-	"github.com/dinorain/useraja/pkg/logger"
+	"github.com/dinorain/checkoutaja/config"
+	"github.com/dinorain/checkoutaja/internal/models"
+	"github.com/dinorain/checkoutaja/internal/user/mock"
+	"github.com/dinorain/checkoutaja/pkg/logger"
 )
 
 func TestUserUseCase_Register(t *testing.T) {

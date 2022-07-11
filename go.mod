@@ -1,4 +1,4 @@
-module github.com/dinorain/useraja
+module github.com/dinorain/checkoutaja
 
 go 1.16
 

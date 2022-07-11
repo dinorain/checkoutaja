@@ -7,8 +7,8 @@ import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 
-	"github.com/dinorain/useraja/config"
-	"github.com/dinorain/useraja/pkg/constants"
+	"github.com/dinorain/checkoutaja/config"
+	"github.com/dinorain/checkoutaja/pkg/constants"
 )
 
 // Logger methods interface

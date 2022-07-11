@@ -7,8 +7,8 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
 
-	"github.com/dinorain/useraja/config"
-	"github.com/dinorain/useraja/pkg/logger"
+	"github.com/dinorain/checkoutaja/config"
+	"github.com/dinorain/checkoutaja/pkg/logger"
 )
 
 // InterceptorManager

@@ -5,7 +5,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/dinorain/useraja/internal/models"
+	"github.com/dinorain/checkoutaja/internal/models"
 )
 
 type UserResponseDto struct {

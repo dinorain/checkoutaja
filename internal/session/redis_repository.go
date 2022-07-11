@@ -4,7 +4,7 @@ package session
 import (
 	"context"
 
-	"github.com/dinorain/useraja/internal/models"
+	"github.com/dinorain/checkoutaja/internal/models"
 )
 
 // Session repository

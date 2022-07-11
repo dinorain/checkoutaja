@@ -1,11 +1,11 @@
 version: "3.8"
 
 services:
-  auth_microservice:
-    container_name: auth_microservice
+  api_gateway_service:
+    container_name: api_gateway_service
     build:
       context: ./
-      dockerfile: docker/api_gateway_http.Dockerfile
+      dockerfile: docker/api_gateway_service.Dockerfile
     ports:
       - "5001:5001"
       - "3001:3001"

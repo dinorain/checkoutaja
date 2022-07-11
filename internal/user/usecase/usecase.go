@@ -9,12 +9,12 @@ import (
 	"github.com/google/uuid"
 	"github.com/pkg/errors"
 
-	"github.com/dinorain/useraja/config"
-	"github.com/dinorain/useraja/internal/models"
-	"github.com/dinorain/useraja/internal/user"
-	"github.com/dinorain/useraja/pkg/grpc_errors"
-	"github.com/dinorain/useraja/pkg/logger"
-	"github.com/dinorain/useraja/pkg/utils"
+	"github.com/dinorain/checkoutaja/config"
+	"github.com/dinorain/checkoutaja/internal/models"
+	"github.com/dinorain/checkoutaja/internal/user"
+	"github.com/dinorain/checkoutaja/pkg/grpc_errors"
+	"github.com/dinorain/checkoutaja/pkg/logger"
+	"github.com/dinorain/checkoutaja/pkg/utils"
 )
 
 const (

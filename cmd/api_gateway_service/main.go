@@ -4,12 +4,12 @@ import (
 	"log"
 	"os"
 
-	"github.com/dinorain/useraja/config"
-	"github.com/dinorain/useraja/internal/server"
-	"github.com/dinorain/useraja/pkg/logger"
-	"github.com/dinorain/useraja/pkg/postgres"
-	"github.com/dinorain/useraja/pkg/redis"
-	"github.com/dinorain/useraja/pkg/utils"
+	"github.com/dinorain/checkoutaja/config"
+	"github.com/dinorain/checkoutaja/internal/server"
+	"github.com/dinorain/checkoutaja/pkg/logger"
+	"github.com/dinorain/checkoutaja/pkg/postgres"
+	"github.com/dinorain/checkoutaja/pkg/redis"
+	"github.com/dinorain/checkoutaja/pkg/utils"
 )
 
 // @contact.name Dustin Jourdan

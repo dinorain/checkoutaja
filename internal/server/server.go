@@ -20,17 +20,17 @@ import (
 
 	"github.com/go-playground/validator"
 
-	"github.com/dinorain/useraja/config"
-	"github.com/dinorain/useraja/internal/interceptors"
-	"github.com/dinorain/useraja/internal/middlewares"
-	sessRepository "github.com/dinorain/useraja/internal/session/repository"
-	sessUseCase "github.com/dinorain/useraja/internal/session/usecase"
-	authServerGRPC "github.com/dinorain/useraja/internal/user/delivery/grpc/service"
-	userDeliveryHTTP "github.com/dinorain/useraja/internal/user/delivery/http/service"
-	userRepository "github.com/dinorain/useraja/internal/user/repository"
-	userUseCase "github.com/dinorain/useraja/internal/user/usecase"
-	"github.com/dinorain/useraja/pkg/logger"
-	userService "github.com/dinorain/useraja/proto"
+	"github.com/dinorain/checkoutaja/config"
+	"github.com/dinorain/checkoutaja/internal/interceptors"
+	"github.com/dinorain/checkoutaja/internal/middlewares"
+	sessRepository "github.com/dinorain/checkoutaja/internal/session/repository"
+	sessUseCase "github.com/dinorain/checkoutaja/internal/session/usecase"
+	authServerGRPC "github.com/dinorain/checkoutaja/internal/user/delivery/grpc/service"
+	userDeliveryHTTP "github.com/dinorain/checkoutaja/internal/user/delivery/http/service"
+	userRepository "github.com/dinorain/checkoutaja/internal/user/repository"
+	userUseCase "github.com/dinorain/checkoutaja/internal/user/usecase"
+	"github.com/dinorain/checkoutaja/pkg/logger"
+	userService "github.com/dinorain/checkoutaja/proto"
 )
 
 type Server struct {
