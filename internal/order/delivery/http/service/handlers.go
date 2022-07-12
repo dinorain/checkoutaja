@@ -262,7 +262,7 @@ func (h *orderHandlersHTTP) AcceptByID() echo.HandlerFunc {
 // DeleteByID
 // @Tags Orders
 // @Summary Delete order
-// @Description Delete existing order
+// @Description Delete existing order, admin only
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth

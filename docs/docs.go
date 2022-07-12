@@ -167,7 +167,7 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Delete existing order",
+                "description": "Delete existing order, admin only",
                 "consumes": [
                     "application/json"
                 ],
@@ -654,7 +654,7 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Delete existing seller",
+                "description": "Delete existing seller, admin only",
                 "consumes": [
                     "application/json"
                 ],

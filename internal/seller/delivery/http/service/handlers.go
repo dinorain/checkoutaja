@@ -271,7 +271,7 @@ func (h *sellerHandlersHTTP) UpdateByID() echo.HandlerFunc {
 // DeleteByID
 // @Tags Sellers
 // @Summary Delete seller
-// @Description Delete existing seller
+// @Description Delete existing seller, admin only
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth

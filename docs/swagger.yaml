@@ -407,7 +407,7 @@ paths:
     delete:
       consumes:
       - application/json
-      description: Delete existing order
+      description: Delete existing order, admin only
       parameters:
       - description: Order ID
         in: path
@@ -629,7 +629,7 @@ paths:
     delete:
       consumes:
       - application/json
-      description: Delete existing seller
+      description: Delete existing seller, admin only
       parameters:
       - description: Seller ID
         in: path
