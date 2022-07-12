@@ -151,14 +151,16 @@ func (h *orderHandlersHTTP) FindAll() echo.HandlerFunc {
 			return httpErrors.ErrorCtxResponse(c, err, h.cfg.Http.DebugErrorsResponse)
 		}
 		if role == "" {
-			if res, err := h.orderUC.FindAllBySellerId(ctx, userID, pq); err != nil {
+			userUUID, _ := uuid.Parse(userID)
+			if res, err := h.orderUC.FindAllBySellerId(ctx, userUUID, pq); err != nil {
 				h.logger.Errorf("orderUC.FindAllBySellerId: %v", err)
 				return httpErrors.ErrorCtxResponse(c, err, h.cfg.Http.DebugErrorsResponse)
 			} else {
 				orders = res
 			}
 		} else if role == models.UserRoleUser {
-			if res, err := h.orderUC.FindAllByUserId(ctx, c.QueryParam("seller_id"), pq); err != nil {
+			userUUID, _ := uuid.Parse(userID)
+			if res, err := h.orderUC.FindAllByUserId(ctx, userUUID, pq); err != nil {
 				h.logger.Errorf("orderUC.FindAllByUserId: %v", err)
 				return httpErrors.ErrorCtxResponse(c, err, h.cfg.Http.DebugErrorsResponse)
 			} else {

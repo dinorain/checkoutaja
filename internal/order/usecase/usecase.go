@@ -49,8 +49,8 @@ func (u *orderUseCase) FindAll(ctx context.Context, pagination *utils.Pagination
 }
 
 // FindAllByUserId find orders by user id
-func (u *orderUseCase) FindAllByUserId(ctx context.Context, userId string, pagination *utils.Pagination) ([]models.Order, error) {
-	orders, err := u.orderPgRepo.FindAllByUserId(ctx, userId, pagination)
+func (u *orderUseCase) FindAllByUserId(ctx context.Context, userID uuid.UUID, pagination *utils.Pagination) ([]models.Order, error) {
+	orders, err := u.orderPgRepo.FindAllByUserId(ctx, userID, pagination)
 	if err != nil {
 		return nil, errors.Wrap(err, "orderPgRepo.FindAllByUserId")
 	}
@@ -59,8 +59,8 @@ func (u *orderUseCase) FindAllByUserId(ctx context.Context, userId string, pagin
 }
 
 // FindAllBySellerId find orders by seller id
-func (u *orderUseCase) FindAllBySellerId(ctx context.Context, sellerId string, pagination *utils.Pagination) ([]models.Order, error) {
-	orders, err := u.orderPgRepo.FindAllBySellerId(ctx, sellerId, pagination)
+func (u *orderUseCase) FindAllBySellerId(ctx context.Context, sellerID uuid.UUID, pagination *utils.Pagination) ([]models.Order, error) {
+	orders, err := u.orderPgRepo.FindAllBySellerId(ctx, sellerID, pagination)
 	if err != nil {
 		return nil, errors.Wrap(err, "orderPgRepo.FindAllByUserId")
 	}
@@ -69,8 +69,8 @@ func (u *orderUseCase) FindAllBySellerId(ctx context.Context, sellerId string, p
 }
 
 // FindAllByUserIdSellerId find orders by seller id
-func (u *orderUseCase) FindAllByUserIdSellerId(ctx context.Context, userId string, sellerId string, pagination *utils.Pagination) ([]models.Order, error) {
-	orders, err := u.orderPgRepo.FindAllByUserIdSellerId(ctx, userId, sellerId, pagination)
+func (u *orderUseCase) FindAllByUserIdSellerId(ctx context.Context, userID uuid.UUID, sellerID uuid.UUID, pagination *utils.Pagination) ([]models.Order, error) {
+	orders, err := u.orderPgRepo.FindAllByUserIdSellerId(ctx, userID, sellerID, pagination)
 	if err != nil {
 		return nil, errors.Wrap(err, "orderPgRepo.FindAllByUserIdSellerId")
 	}

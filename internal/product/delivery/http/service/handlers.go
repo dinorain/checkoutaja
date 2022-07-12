@@ -124,7 +124,8 @@ func (h *productHandlersHTTP) FindAll() echo.HandlerFunc {
 			return httpErrors.ErrorCtxResponse(c, err, h.cfg.Http.DebugErrorsResponse)
 		}
 		if role == "" {
-			if res, err := h.productUC.FindAllBySellerId(ctx, userID, pq); err != nil {
+			userUUID, _ := uuid.Parse(userID)
+			if res, err := h.productUC.FindAllBySellerId(ctx, userUUID, pq); err != nil {
 				h.logger.Errorf("productUC.FindAllBySellerId: %v", err)
 				return httpErrors.ErrorCtxResponse(c, err, h.cfg.Http.DebugErrorsResponse)
 			} else {

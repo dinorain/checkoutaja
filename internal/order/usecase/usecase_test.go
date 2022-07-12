@@ -158,9 +158,9 @@ func TestOrderUseCase_FindAllBySellerId(t *testing.T) {
 
 	ctx := context.Background()
 
-	sellerPGRepository.EXPECT().FindAllBySellerId(gomock.Any(), mockOrder.SellerID.String(), nil).AnyTimes().Return(append([]models.Order{}, *mockOrder), nil)
+	sellerPGRepository.EXPECT().FindAllBySellerId(gomock.Any(), mockOrder.SellerID, nil).AnyTimes().Return(append([]models.Order{}, *mockOrder), nil)
 
-	sellers, err := sellerUC.FindAllBySellerId(ctx, mockOrder.SellerID.String(), nil)
+	sellers, err := sellerUC.FindAllBySellerId(ctx, mockOrder.SellerID, nil)
 	require.NoError(t, err)
 	require.NotNil(t, sellers)
 	require.Equal(t, len(sellers), 1)
@@ -203,9 +203,9 @@ func TestOrderUseCase_FindAllByUserId(t *testing.T) {
 
 	ctx := context.Background()
 
-	sellerPGRepository.EXPECT().FindAllByUserId(gomock.Any(), mockOrder.UserID.String(), nil).AnyTimes().Return(append([]models.Order{}, *mockOrder), nil)
+	sellerPGRepository.EXPECT().FindAllByUserId(gomock.Any(), mockOrder.UserID, nil).AnyTimes().Return(append([]models.Order{}, *mockOrder), nil)
 
-	sellers, err := sellerUC.FindAllByUserId(ctx, mockOrder.UserID.String(), nil)
+	sellers, err := sellerUC.FindAllByUserId(ctx, mockOrder.UserID, nil)
 	require.NoError(t, err)
 	require.NotNil(t, sellers)
 	require.Equal(t, len(sellers), 1)
@@ -248,9 +248,9 @@ func TestOrderUseCase_FindAllByUserSellerId(t *testing.T) {
 
 	ctx := context.Background()
 
-	sellerPGRepository.EXPECT().FindAllByUserIdSellerId(gomock.Any(), mockOrder.UserID.String(), mockOrder.SellerID.String(), nil).AnyTimes().Return(append([]models.Order{}, *mockOrder), nil)
+	sellerPGRepository.EXPECT().FindAllByUserIdSellerId(gomock.Any(), mockOrder.UserID, mockOrder.SellerID, nil).AnyTimes().Return(append([]models.Order{}, *mockOrder), nil)
 
-	sellers, err := sellerUC.FindAllByUserIdSellerId(ctx, mockOrder.UserID.String(), mockOrder.SellerID.String(), nil)
+	sellers, err := sellerUC.FindAllByUserIdSellerId(ctx, mockOrder.UserID, mockOrder.SellerID, nil)
 	require.NoError(t, err)
 	require.NotNil(t, sellers)
 	require.Equal(t, len(sellers), 1)

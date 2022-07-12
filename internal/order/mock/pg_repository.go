@@ -82,7 +82,7 @@ func (mr *MockOrderPGRepositoryMockRecorder) FindAll(ctx, pagination interface{}
 }
 
 // FindAllBySellerId mocks base method.
-func (m *MockOrderPGRepository) FindAllBySellerId(ctx context.Context, sellerID string, pagination *utils.Pagination) ([]models.Order, error) {
+func (m *MockOrderPGRepository) FindAllBySellerId(ctx context.Context, sellerID uuid.UUID, pagination *utils.Pagination) ([]models.Order, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindAllBySellerId", ctx, sellerID, pagination)
 	ret0, _ := ret[0].([]models.Order)
@@ -97,7 +97,7 @@ func (mr *MockOrderPGRepositoryMockRecorder) FindAllBySellerId(ctx, sellerID, pa
 }
 
 // FindAllByUserId mocks base method.
-func (m *MockOrderPGRepository) FindAllByUserId(ctx context.Context, userID string, pagination *utils.Pagination) ([]models.Order, error) {
+func (m *MockOrderPGRepository) FindAllByUserId(ctx context.Context, userID uuid.UUID, pagination *utils.Pagination) ([]models.Order, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindAllByUserId", ctx, userID, pagination)
 	ret0, _ := ret[0].([]models.Order)
@@ -112,7 +112,7 @@ func (mr *MockOrderPGRepositoryMockRecorder) FindAllByUserId(ctx, userID, pagina
 }
 
 // FindAllByUserIdSellerId mocks base method.
-func (m *MockOrderPGRepository) FindAllByUserIdSellerId(ctx context.Context, userID, sellerID string, pagination *utils.Pagination) ([]models.Order, error) {
+func (m *MockOrderPGRepository) FindAllByUserIdSellerId(ctx context.Context, userID, sellerID uuid.UUID, pagination *utils.Pagination) ([]models.Order, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindAllByUserIdSellerId", ctx, userID, sellerID, pagination)
 	ret0, _ := ret[0].([]models.Order)

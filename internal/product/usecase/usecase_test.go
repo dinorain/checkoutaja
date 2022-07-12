@@ -111,9 +111,9 @@ func TestProductUseCase_FindAllBySellerId(t *testing.T) {
 
 	ctx := context.Background()
 
-	sellerPGRepository.EXPECT().FindAllBySellerId(gomock.Any(), sellerUUID.String(), nil).AnyTimes().Return(append([]models.Product{}, *mockProduct), nil)
+	sellerPGRepository.EXPECT().FindAllBySellerId(gomock.Any(), sellerUUID, nil).AnyTimes().Return(append([]models.Product{}, *mockProduct), nil)
 
-	sellers, err := sellerUC.FindAllBySellerId(ctx, sellerUUID.String(), nil)
+	sellers, err := sellerUC.FindAllBySellerId(ctx, sellerUUID, nil)
 	require.NoError(t, err)
 	require.NotNil(t, sellers)
 	require.Equal(t, len(sellers), 1)

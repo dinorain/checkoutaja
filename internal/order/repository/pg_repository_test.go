@@ -225,19 +225,19 @@ func TestOrderRepository_FindAllBySellerId(t *testing.T) {
 
 	size := 10
 	mock.ExpectQuery(findAllBySellerIDQuery).WithArgs(mockOrder.SellerID, size, 0).WillReturnRows(rows)
-	foundOrders, err := orderPGRepository.FindAllBySellerId(context.Background(), mockOrder.SellerID.String(), utils.NewPaginationQuery(size, 1))
+	foundOrders, err := orderPGRepository.FindAllBySellerId(context.Background(), mockOrder.SellerID, utils.NewPaginationQuery(size, 1))
 	require.NoError(t, err)
 	require.NotNil(t, foundOrders)
 	require.Equal(t, len(foundOrders), 1)
 
 	mock.ExpectQuery(findAllBySellerIDQuery).WithArgs(mockOtherOrder.SellerID, size, 0).WillReturnRows(otherRows)
-	foundOrders, err = orderPGRepository.FindAllBySellerId(context.Background(), mockOtherOrder.SellerID.String(), utils.NewPaginationQuery(size, 1))
+	foundOrders, err = orderPGRepository.FindAllBySellerId(context.Background(), mockOtherOrder.SellerID, utils.NewPaginationQuery(size, 1))
 	require.NoError(t, err)
 	require.NotNil(t, foundOrders)
 	require.Equal(t, len(foundOrders), 1)
 
 	mock.ExpectQuery(findAllBySellerIDQuery).WithArgs(mockOtherOrder.SellerID, size, 10).WillReturnRows(otherRows)
-	foundOrders, err = orderPGRepository.FindAllBySellerId(context.Background(), mockOtherOrder.SellerID.String(), utils.NewPaginationQuery(size, 2))
+	foundOrders, err = orderPGRepository.FindAllBySellerId(context.Background(), mockOtherOrder.SellerID, utils.NewPaginationQuery(size, 2))
 	require.NoError(t, err)
 	require.Nil(t, foundOrders)
 }
@@ -326,19 +326,19 @@ func TestOrderRepository_FindAllByUserId(t *testing.T) {
 
 	size := 10
 	mock.ExpectQuery(findByUserIDQuery).WithArgs(mockOrder.UserID, size, 0).WillReturnRows(rows)
-	foundOrders, err := orderPGRepository.FindAllByUserId(context.Background(), mockOrder.UserID.String(), utils.NewPaginationQuery(size, 1))
+	foundOrders, err := orderPGRepository.FindAllByUserId(context.Background(), mockOrder.UserID, utils.NewPaginationQuery(size, 1))
 	require.NoError(t, err)
 	require.NotNil(t, foundOrders)
 	require.Equal(t, len(foundOrders), 1)
 
 	mock.ExpectQuery(findByUserIDQuery).WithArgs(mockOtherOrder.UserID, size, 0).WillReturnRows(otherRows)
-	foundOrders, err = orderPGRepository.FindAllByUserId(context.Background(), mockOtherOrder.UserID.String(), utils.NewPaginationQuery(size, 1))
+	foundOrders, err = orderPGRepository.FindAllByUserId(context.Background(), mockOtherOrder.UserID, utils.NewPaginationQuery(size, 1))
 	require.NoError(t, err)
 	require.NotNil(t, foundOrders)
 	require.Equal(t, len(foundOrders), 1)
 
 	mock.ExpectQuery(findByUserIDQuery).WithArgs(mockOtherOrder.UserID, size, 10).WillReturnRows(otherRows)
-	foundOrders, err = orderPGRepository.FindAllByUserId(context.Background(), mockOtherOrder.UserID.String(), utils.NewPaginationQuery(size, 2))
+	foundOrders, err = orderPGRepository.FindAllByUserId(context.Background(), mockOtherOrder.UserID, utils.NewPaginationQuery(size, 2))
 	require.NoError(t, err)
 	require.Nil(t, foundOrders)
 }
@@ -427,19 +427,19 @@ func TestOrderRepository_FindAllByUserIdSellerId(t *testing.T) {
 
 	size := 10
 	mock.ExpectQuery(findAllByUserIDSellerIDQuery).WithArgs(mockOrder.UserID, mockOrder.SellerID, size, 0).WillReturnRows(rows)
-	foundOrders, err := orderPGRepository.FindAllByUserIdSellerId(context.Background(), mockOrder.UserID.String(), mockOrder.SellerID.String(), utils.NewPaginationQuery(size, 1))
+	foundOrders, err := orderPGRepository.FindAllByUserIdSellerId(context.Background(), mockOrder.UserID, mockOrder.SellerID, utils.NewPaginationQuery(size, 1))
 	require.NoError(t, err)
 	require.NotNil(t, foundOrders)
 	require.Equal(t, len(foundOrders), 1)
 
 	mock.ExpectQuery(findAllByUserIDSellerIDQuery).WithArgs(mockOtherOrder.UserID, mockOtherOrder.SellerID, size, 0).WillReturnRows(otherRows)
-	foundOrders, err = orderPGRepository.FindAllByUserIdSellerId(context.Background(), mockOtherOrder.UserID.String(), mockOtherOrder.SellerID.String(), utils.NewPaginationQuery(size, 1))
+	foundOrders, err = orderPGRepository.FindAllByUserIdSellerId(context.Background(), mockOtherOrder.UserID, mockOtherOrder.SellerID, utils.NewPaginationQuery(size, 1))
 	require.NoError(t, err)
 	require.NotNil(t, foundOrders)
 	require.Equal(t, len(foundOrders), 1)
 
 	mock.ExpectQuery(findAllByUserIDSellerIDQuery).WithArgs(mockOtherOrder.UserID, mockOtherOrder.SellerID, size, 10).WillReturnRows(otherRows)
-	foundOrders, err = orderPGRepository.FindAllByUserIdSellerId(context.Background(), mockOtherOrder.UserID.String(), mockOtherOrder.SellerID.String(), utils.NewPaginationQuery(size, 2))
+	foundOrders, err = orderPGRepository.FindAllByUserIdSellerId(context.Background(), mockOtherOrder.UserID, mockOtherOrder.SellerID, utils.NewPaginationQuery(size, 2))
 	require.NoError(t, err)
 	require.Nil(t, foundOrders)
 }

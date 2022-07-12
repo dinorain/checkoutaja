@@ -49,7 +49,7 @@ func (u *productUseCase) FindAll(ctx context.Context, pagination *utils.Paginati
 }
 
 // FindAllBySellerId find products by seller id
-func (u *productUseCase) FindAllBySellerId(ctx context.Context, sellerId string, pagination *utils.Pagination) ([]models.Product, error) {
+func (u *productUseCase) FindAllBySellerId(ctx context.Context, sellerID uuid.UUID, pagination *utils.Pagination) ([]models.Product, error) {
 	products, err := u.productPgRepo.FindAllBySellerId(ctx, sellerId, pagination)
 	if err != nil {
 		return nil, errors.Wrap(err, "productPgRepo.FindAllBySellerId")

@@ -151,24 +151,24 @@ func TestProductRepository_FindAllBySellerId(t *testing.T) {
 
 	size := 10
 	mock.ExpectQuery(findAllBySellerIDQuery).WithArgs(mockProduct.SellerID, size, 0).WillReturnRows(rows)
-	foundProducts, err := productPGRepository.FindAllBySellerId(context.Background(), mockProduct.SellerID.String(), utils.NewPaginationQuery(size, 1))
+	foundProducts, err := productPGRepository.FindAllBySellerId(context.Background(), mockProduct.SellerID, utils.NewPaginationQuery(size, 1))
 	require.NoError(t, err)
 	require.NotNil(t, foundProducts)
 	require.Equal(t, len(foundProducts), 1)
 
 	mock.ExpectQuery(findAllBySellerIDQuery).WithArgs(mockProduct.SellerID, size, 10).WillReturnRows(rows)
-	foundProducts, err = productPGRepository.FindAllBySellerId(context.Background(), mockProduct.SellerID.String(), utils.NewPaginationQuery(size, 2))
+	foundProducts, err = productPGRepository.FindAllBySellerId(context.Background(), mockProduct.SellerID, utils.NewPaginationQuery(size, 2))
 	require.NoError(t, err)
 	require.Nil(t, foundProducts)
 
 	mock.ExpectQuery(findAllBySellerIDQuery).WithArgs(otherUUID, size, 0).WillReturnRows(otherRows)
-	foundProducts, err = productPGRepository.FindAllBySellerId(context.Background(), otherUUID.String(), utils.NewPaginationQuery(size, 1))
+	foundProducts, err = productPGRepository.FindAllBySellerId(context.Background(), otherUUID, utils.NewPaginationQuery(size, 1))
 	require.NoError(t, err)
 	require.NotNil(t, foundProducts)
 	require.Equal(t, len(foundProducts), 1)
 
 	mock.ExpectQuery(findAllBySellerIDQuery).WithArgs(otherUUID, size, 10).WillReturnRows(otherRows)
-	foundProducts, err = productPGRepository.FindAllBySellerId(context.Background(), otherUUID.String(), utils.NewPaginationQuery(size, 2))
+	foundProducts, err = productPGRepository.FindAllBySellerId(context.Background(), otherUUID, utils.NewPaginationQuery(size, 2))
 	require.NoError(t, err)
 	require.Nil(t, foundProducts)
 }
