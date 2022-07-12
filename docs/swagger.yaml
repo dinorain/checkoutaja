@@ -11,10 +11,10 @@ definitions:
     type: object
   dto.OrderCreateResponseDto:
     properties:
-      user_id:
+      order_id:
         type: string
     required:
-    - user_id
+    - order_id
     type: object
   dto.OrderFindResponseDto:
     properties:
@@ -64,10 +64,10 @@ definitions:
     type: object
   dto.ProductCreateResponseDto:
     properties:
-      user_id:
+      product_id:
         type: string
     required:
-    - user_id
+    - product_id
     type: object
   dto.ProductFindResponseDto:
     properties:
@@ -91,6 +91,17 @@ definitions:
         type: string
       updated_at:
         type: string
+    type: object
+  dto.ProductUpdateRequestDto:
+    properties:
+      description:
+        maxLength: 250
+        type: string
+      name:
+        maxLength: 30
+        type: string
+      price:
+        type: number
     type: object
   dto.SellerFindResponseDto:
     properties:
@@ -179,8 +190,6 @@ definitions:
         type: string
       pickup_address:
         type: string
-      role:
-        type: string
       seller_id:
         type: string
       updated_at:
@@ -263,6 +272,7 @@ definitions:
       role:
         type: string
     required:
+    - delivery_address
     - email
     - first_name
     - last_name
@@ -560,6 +570,12 @@ paths:
         name: id
         required: true
         type: string
+      - description: Payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/dto.ProductUpdateRequestDto'
       produces:
       - application/json
       responses:

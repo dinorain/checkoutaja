@@ -342,6 +342,15 @@ const docTemplate = `{
                         "name": "id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "description": "Payload",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.ProductUpdateRequestDto"
+                        }
                     }
                 ],
                 "responses": {
@@ -1014,10 +1023,10 @@ const docTemplate = `{
         "dto.OrderCreateResponseDto": {
             "type": "object",
             "required": [
-                "user_id"
+                "order_id"
             ],
             "properties": {
-                "user_id": {
+                "order_id": {
                     "type": "string"
                 }
             }
@@ -1093,10 +1102,10 @@ const docTemplate = `{
         "dto.ProductCreateResponseDto": {
             "type": "object",
             "required": [
-                "user_id"
+                "product_id"
             ],
             "properties": {
-                "user_id": {
+                "product_id": {
                     "type": "string"
                 }
             }
@@ -1133,6 +1142,22 @@ const docTemplate = `{
                 },
                 "updated_at": {
                     "type": "string"
+                }
+            }
+        },
+        "dto.ProductUpdateRequestDto": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string",
+                    "maxLength": 250
+                },
+                "name": {
+                    "type": "string",
+                    "maxLength": 30
+                },
+                "price": {
+                    "type": "number"
                 }
             }
         },
@@ -1264,9 +1289,6 @@ const docTemplate = `{
                 "pickup_address": {
                     "type": "string"
                 },
-                "role": {
-                    "type": "string"
-                },
                 "seller_id": {
                     "type": "string"
                 },
@@ -1366,6 +1388,7 @@ const docTemplate = `{
         "dto.UserRegisterRequestDto": {
             "type": "object",
             "required": [
+                "delivery_address",
                 "email",
                 "first_name",
                 "last_name",
