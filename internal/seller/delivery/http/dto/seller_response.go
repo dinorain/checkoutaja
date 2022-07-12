@@ -13,7 +13,6 @@ type SellerResponseDto struct {
 	Email         string    `json:"email"`
 	FirstName     string    `json:"first_name"`
 	LastName      string    `json:"last_name"`
-	Role          string    `json:"role"`
 	Avatar        *string   `json:"avatar"`
 	PickupAddress string    `json:"pickup_address"`
 	CreatedAt     time.Time `json:"created_at"`

@@ -2,7 +2,7 @@ package repository
 
 const (
 	createOrderQuery = `INSERT INTO orders (user_id, seller_id, item, quantity, total_price, status, delivery_source_address, delivery_destination_address) 
-		VALUES ($1, $2, $3, $4, $5, $6, $7, $8)) 
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
 		RETURNING order_id, user_id, seller_id, item, quantity, total_price, status, delivery_source_address, delivery_destination_address, created_at, updated_at`
 
 	findByIDQuery = `SELECT order_id, user_id, seller_id, item, quantity, total_price, status, delivery_source_address, delivery_destination_address, created_at, updated_at FROM orders WHERE order_id = $1`

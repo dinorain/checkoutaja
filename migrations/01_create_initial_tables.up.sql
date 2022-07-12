@@ -55,7 +55,6 @@ CREATE TABLE orders
     seller_id   UUID REFERENCES sellers (seller_id),
     item        JSONB,
     quantity    NUMERIC       NOT NULL,
-    price       NUMERIC       NOT NULL,
     total_price NUMERIC       NOT NULL,
     status      status        NOT NULL DEFAULT 'pending',
 

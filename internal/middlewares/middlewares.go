@@ -59,7 +59,7 @@ func (mw *middlewareManager) IsAdmin(next echo.HandlerFunc) echo.HandlerFunc {
 		}
 
 		if role != models.UserRoleAdmin {
-			return httpErrors.NewForbiddenError(c, echo.ErrForbidden, mw.cfg.Http.DebugErrorsResponse)
+			return httpErrors.NewForbiddenError(c, nil, mw.cfg.Http.DebugErrorsResponse)
 		}
 
 		return next(c)
@@ -84,7 +84,7 @@ func (mw *middlewareManager) IsSeller(next echo.HandlerFunc) echo.HandlerFunc {
 		}
 
 		if sellerID == "" {
-			return httpErrors.NewForbiddenError(c, echo.ErrForbidden, mw.cfg.Http.DebugErrorsResponse)
+			return httpErrors.NewForbiddenError(c, nil, mw.cfg.Http.DebugErrorsResponse)
 		}
 
 		return next(c)
@@ -110,7 +110,7 @@ func (mw *middlewareManager) IsUser(next echo.HandlerFunc) echo.HandlerFunc {
 		}
 
 		if role != models.UserRoleUser {
-			return httpErrors.NewForbiddenError(c, echo.ErrForbidden, mw.cfg.Http.DebugErrorsResponse)
+			return httpErrors.NewForbiddenError(c, nil, mw.cfg.Http.DebugErrorsResponse)
 		}
 
 		return next(c)

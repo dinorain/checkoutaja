@@ -10,7 +10,7 @@ type UserRegisterRequestDto struct {
 	LastName        string `json:"last_name" validate:"required,lte=30"`
 	Password        string `json:"password" validate:"required"`
 	Role            string `json:"role" validate:"required"`
-	DeliveryAddress string `json:"delivery_address"`
+	DeliveryAddress string `json:"delivery_address" validate:"required"`
 }
 
 type UserRegisterResponseDto struct {

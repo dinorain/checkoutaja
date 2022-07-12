@@ -232,7 +232,7 @@ func (h *userHandlersHTTP) UpdateByID() echo.HandlerFunc {
 		}
 
 		if role != models.UserRoleAdmin && userID != userUUID.String() {
-			return httpErrors.NewForbiddenError(c, err, h.cfg.Http.DebugErrorsResponse)
+			return httpErrors.NewForbiddenError(c, nil, h.cfg.Http.DebugErrorsResponse)
 		}
 
 		updateDto := &dto.UserUpdateRequestDto{}
@@ -319,7 +319,7 @@ func (h *userHandlersHTTP) GetMe() echo.HandlerFunc {
 		if err != nil {
 			h.logger.Errorf("sessUC.GetSessionByID: %v", err)
 			if errors.Is(err, redis.Nil) {
-				return httpErrors.NewUnauthorizedError(c, err, h.cfg.Http.DebugErrorsResponse)
+				return httpErrors.NewUnauthorizedError(c, nil, h.cfg.Http.DebugErrorsResponse)
 			}
 			return httpErrors.ErrorCtxResponse(c, err, h.cfg.Http.DebugErrorsResponse)
 		}
@@ -415,7 +415,7 @@ func (h *userHandlersHTTP) RefreshToken() echo.HandlerFunc {
 		if err != nil {
 			h.logger.Errorf("sessUC.GetSessionByID: %v", err)
 			if errors.Is(err, redis.Nil) {
-				return httpErrors.NewUnauthorizedError(c, err, h.cfg.Http.DebugErrorsResponse)
+				return httpErrors.NewUnauthorizedError(c, nil, h.cfg.Http.DebugErrorsResponse)
 			}
 			return httpErrors.ErrorCtxResponse(c, err, h.cfg.Http.DebugErrorsResponse)
 		}

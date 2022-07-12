@@ -89,7 +89,7 @@ func (h *orderHandlersHTTP) Create() echo.HandlerFunc {
 		if err != nil {
 			h.logger.Errorf("sessUC.GetSessionByID: %v", err)
 			if errors.Is(err, redis.Nil) {
-				httpErrors.NewUnauthorizedError(c, err, h.cfg.Http.DebugErrorsResponse)
+				return httpErrors.NewUnauthorizedError(c, nil, h.cfg.Http.DebugErrorsResponse)
 			}
 			return httpErrors.ErrorCtxResponse(c, err, h.cfg.Http.DebugErrorsResponse)
 		}
@@ -345,6 +345,7 @@ func (h *orderHandlersHTTP) updateReqToOrderModel(updateCandidate *models.Order,
 	if r.Status == updateCandidate.Status {
 		return nil, fmt.Errorf("order has been %v", r.Status)
 	}
+	updateCandidate.Status = r.Status
 
 	return updateCandidate, nil
 }

@@ -7,7 +7,7 @@ func (h *sellerHandlersHTTP) SellerMapRoutes() {
 	h.group.Use(h.mw.IsLoggedIn())
 	h.group.PUT("/:id", h.UpdateByID())
 
-	h.group.GET("/:id", h.FindByID(), h.mw.IsSeller)
+	h.group.GET("/:id", h.FindByID())
 	h.group.GET("/me", h.GetMe(), h.mw.IsSeller)
 	h.group.POST("/logout", h.Logout(), h.mw.IsSeller)
 

@@ -10,5 +10,5 @@ type OrderCreateRequestDto struct {
 }
 
 type OrderCreateResponseDto struct {
-	OrderID uuid.UUID `json:"user_id" validate:"required"`
+	OrderID uuid.UUID `json:"order_id" validate:"required"`
 }

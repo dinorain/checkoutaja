@@ -2,8 +2,8 @@ package repository
 
 const (
 	createProductQuery = `INSERT INTO products (name, description, price, seller_id) 
-		VALUES ($1, $2, $3, $4)) 
-		RETURNING name, description, price, seller_id, created_at, updated_at`
+		VALUES ($1, $2, $3, $4)
+		RETURNING product_id, name, description, price, seller_id, created_at, updated_at`
 
 	findByIDQuery = `SELECT product_id, name, description, price, seller_id, created_at, updated_at FROM products WHERE product_id = $1`
 

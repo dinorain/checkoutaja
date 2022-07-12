@@ -11,5 +11,5 @@ type ProductCreateRequestDto struct {
 }
 
 type ProductCreateResponseDto struct {
-	ProductID uuid.UUID `json:"user_id" validate:"required"`
+	ProductID uuid.UUID `json:"product_id" validate:"required"`
 }

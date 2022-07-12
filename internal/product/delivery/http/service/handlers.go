@@ -80,7 +80,7 @@ func (h *productHandlersHTTP) Create() echo.HandlerFunc {
 		if err != nil {
 			h.logger.Errorf("sessUC.GetSessionByID: %v", err)
 			if errors.Is(err, redis.Nil) {
-				httpErrors.NewUnauthorizedError(c, err, h.cfg.Http.DebugErrorsResponse)
+				return httpErrors.NewUnauthorizedError(c, nil, h.cfg.Http.DebugErrorsResponse)
 			}
 			return httpErrors.ErrorCtxResponse(c, err, h.cfg.Http.DebugErrorsResponse)
 		}
@@ -183,6 +183,7 @@ func (h *productHandlersHTTP) FindByID() echo.HandlerFunc {
 // @Produce json
 // @Security ApiKeyAuth
 // @Param id path string true "Product ID"
+// @Param payload body dto.ProductUpdateRequestDto true "Payload"
 // @Success 200 {object} dto.ProductResponseDto
 // @Router /product/{id} [put]
 func (h *productHandlersHTTP) UpdateByID() echo.HandlerFunc {
