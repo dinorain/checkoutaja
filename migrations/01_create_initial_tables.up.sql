@@ -23,7 +23,7 @@ CREATE TABLE users
 DROP TABLE IF EXISTS sellers CASCADE;
 CREATE TABLE sellers
 (
-    seller_id   SERIAL PRIMARY KEY,
+    seller_id  UUID PRIMARY KEY                  DEFAULT uuid_generate_v4(),
     first_name VARCHAR(32)              NOT NULL CHECK ( first_name <> '' ),
     last_name  VARCHAR(32)              NOT NULL CHECK ( last_name <> '' ),
     email      VARCHAR(64) UNIQUE       NOT NULL CHECK ( email <> '' ),
@@ -50,9 +50,9 @@ CREATE TABLE products
 DROP TABLE IF EXISTS orders CASCADE;
 CREATE TABLE orders
 (
-    order_id    SERIAL PRIMARY KEY,
-    user_id     INTEGER REFERENCES users (user_id),
-    seller_id   INTEGER REFERENCES sellers (seller_id),
+    order_id    UUID PRIMARY KEY                  DEFAULT uuid_generate_v4(),
+    user_id     UUID REFERENCES users (user_id),
+    seller_id   UUID REFERENCES sellers (seller_id),
     item        JSONB,
     quantity    NUMERIC       NOT NULL,
     price       NUMERIC       NOT NULL,
