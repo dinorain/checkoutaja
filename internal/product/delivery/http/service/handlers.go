@@ -70,7 +70,7 @@ func (h *productHandlersHTTP) Create() echo.HandlerFunc {
 			return httpErrors.ErrorCtxResponse(c, err, h.cfg.Http.DebugErrorsResponse)
 		}
 
-		sessID, err := h.getSessionIDFromCtx(c)
+		sessID, _, _, err := h.getSessionIDFromCtx(c)
 		if err != nil {
 			h.logger.Errorf("getSessionIDFromCtx: %v", err)
 			return httpErrors.ErrorCtxResponse(c, err, h.cfg.Http.DebugErrorsResponse)
@@ -110,7 +110,6 @@ func (h *productHandlersHTTP) Create() echo.HandlerFunc {
 // @Security ApiKeyAuth
 // @Param size query string false "pagination size"
 // @Param page query string false "pagination page"
-// @Param seller_id query string false "seller id"
 // @Success 200 {object} dto.ProductFindResponseDto
 // @Router /product [get]
 func (h *productHandlersHTTP) FindAll() echo.HandlerFunc {
@@ -119,8 +118,13 @@ func (h *productHandlersHTTP) FindAll() echo.HandlerFunc {
 		pq := utils.NewPaginationFromQueryParams(c.QueryParam(constants.Size), c.QueryParam(constants.Page))
 
 		var products []models.Product
-		if c.QueryParam("seller_id") != "" {
-			if res, err := h.productUC.FindAllBySellerId(ctx, c.QueryParam("seller_id"), pq); err != nil {
+		_, userID, role, err := h.getSessionIDFromCtx(c)
+		if err != nil {
+			h.logger.Errorf("getSessionIDFromCtx: %v", err)
+			return httpErrors.ErrorCtxResponse(c, err, h.cfg.Http.DebugErrorsResponse)
+		}
+		if role == "" {
+			if res, err := h.productUC.FindAllBySellerId(ctx, userID, pq); err != nil {
 				h.logger.Errorf("productUC.FindAllBySellerId: %v", err)
 				return httpErrors.ErrorCtxResponse(c, err, h.cfg.Http.DebugErrorsResponse)
 			} else {
@@ -258,26 +262,32 @@ func (h *productHandlersHTTP) DeleteByID() echo.HandlerFunc {
 	}
 }
 
-func (h *productHandlersHTTP) getSessionIDFromCtx(c echo.Context) (string, error) {
+func (h *productHandlersHTTP) getSessionIDFromCtx(c echo.Context) (sessionID string, userID string, role string, err error) {
 	user, ok := c.Get("user").(*jwt.Token)
 	if !ok {
 		h.logger.Warnf("jwt.Token: %+v", c.Get("user"))
-		return "", errors.New("invalid token header")
+		return "", "", "", errors.New("invalid token header")
 	}
 
 	claims, ok := user.Claims.(jwt.MapClaims)
 	if !ok {
 		h.logger.Warnf("jwt.MapClaims: %+v", c.Get("user"))
-		return "", errors.New("invalid token header")
+		return "", "", "", errors.New("invalid token header")
 	}
 
-	sessionID, ok := claims["session_id"].(string)
+	sessionID, ok = claims["session_id"].(string)
 	if !ok {
 		h.logger.Warnf("session_id: %+v", claims)
-		return "", errors.New("invalid token header")
+		return "", "", "", errors.New("invalid token header")
 	}
 
-	return sessionID, nil
+	role, _ = claims["role"].(string)
+	if role != "" {
+		userID, _ = claims["user_id"].(string)
+	} else {
+		userID, _ = claims["seller_id"].(string)
+	}
+	return sessionID, userID, role, nil
 }
 
 func (h *productHandlersHTTP) registerReqToProductModel(r *dto.ProductCreateRequestDto, sellerID uuid.UUID) (*models.Product, error) {

@@ -79,7 +79,7 @@ func (h *orderHandlersHTTP) Create() echo.HandlerFunc {
 			return httpErrors.ErrorCtxResponse(c, err, h.cfg.Http.DebugErrorsResponse)
 		}
 
-		sessID, err := h.getSessionIDFromCtx(c)
+		sessID, _, _, err := h.getSessionIDFromCtx(c)
 		if err != nil {
 			h.logger.Errorf("getSessionIDFromCtx: %v", err)
 			return httpErrors.ErrorCtxResponse(c, err, h.cfg.Http.DebugErrorsResponse)
@@ -137,8 +137,6 @@ func (h *orderHandlersHTTP) Create() echo.HandlerFunc {
 // @Security ApiKeyAuth
 // @Param size query string false "pagination size"
 // @Param page query string false "pagination page"
-// @Param user_id query string false "user id"
-// @Param seller_id query string false "seller id"
 // @Success 200 {object} dto.OrderFindResponseDto
 // @Router /order [get]
 func (h *orderHandlersHTTP) FindAll() echo.HandlerFunc {
@@ -147,23 +145,21 @@ func (h *orderHandlersHTTP) FindAll() echo.HandlerFunc {
 		pq := utils.NewPaginationFromQueryParams(c.QueryParam(constants.Size), c.QueryParam(constants.Page))
 
 		var orders []models.Order
-		if c.QueryParam("user_id") != "" && c.QueryParam("seller_id") != "" {
-			if res, err := h.orderUC.FindAllByUserIdSellerId(ctx, c.QueryParam("user_id"), c.QueryParam("seller_id"), pq); err != nil {
+		_, userID, role, err := h.getSessionIDFromCtx(c)
+		if err != nil {
+			h.logger.Errorf("getSessionIDFromCtx: %v", err)
+			return httpErrors.ErrorCtxResponse(c, err, h.cfg.Http.DebugErrorsResponse)
+		}
+		if role == "" {
+			if res, err := h.orderUC.FindAllBySellerId(ctx, userID, pq); err != nil {
 				h.logger.Errorf("orderUC.FindAllBySellerId: %v", err)
 				return httpErrors.ErrorCtxResponse(c, err, h.cfg.Http.DebugErrorsResponse)
 			} else {
 				orders = res
 			}
-		} else if c.QueryParam("seller_id") != "" {
-			if res, err := h.orderUC.FindAllBySellerId(ctx, c.QueryParam("seller_id"), pq); err != nil {
-				h.logger.Errorf("orderUC.FindAllBySellerId: %v", err)
-				return httpErrors.ErrorCtxResponse(c, err, h.cfg.Http.DebugErrorsResponse)
-			} else {
-				orders = res
-			}
-		} else if c.QueryParam("user_id") != "" {
-			if res, err := h.orderUC.FindAllBySellerId(ctx, c.QueryParam("seller_id"), pq); err != nil {
-				h.logger.Errorf("orderUC.FindAllBySellerId: %v", err)
+		} else if role == models.UserRoleUser {
+			if res, err := h.orderUC.FindAllByUserId(ctx, c.QueryParam("seller_id"), pq); err != nil {
+				h.logger.Errorf("orderUC.FindAllByUserId: %v", err)
 				return httpErrors.ErrorCtxResponse(c, err, h.cfg.Http.DebugErrorsResponse)
 			} else {
 				orders = res
@@ -292,26 +288,32 @@ func (h *orderHandlersHTTP) DeleteByID() echo.HandlerFunc {
 	}
 }
 
-func (h *orderHandlersHTTP) getSessionIDFromCtx(c echo.Context) (string, error) {
+func (h *orderHandlersHTTP) getSessionIDFromCtx(c echo.Context) (sessionID string, userID string, role string, err error) {
 	user, ok := c.Get("user").(*jwt.Token)
 	if !ok {
 		h.logger.Warnf("jwt.Token: %+v", c.Get("user"))
-		return "", errors.New("invalid token header")
+		return "", "", "", errors.New("invalid token header")
 	}
 
 	claims, ok := user.Claims.(jwt.MapClaims)
 	if !ok {
 		h.logger.Warnf("jwt.MapClaims: %+v", c.Get("user"))
-		return "", errors.New("invalid token header")
+		return "", "", "", errors.New("invalid token header")
 	}
 
-	sessionID, ok := claims["session_id"].(string)
+	sessionID, ok = claims["session_id"].(string)
 	if !ok {
 		h.logger.Warnf("session_id: %+v", claims)
-		return "", errors.New("invalid token header")
+		return "", "", "", errors.New("invalid token header")
 	}
 
-	return sessionID, nil
+	role, _ = claims["role"].(string)
+	if role != "" {
+		userID, _ = claims["user_id"].(string)
+	} else {
+		userID, _ = claims["seller_id"].(string)
+	}
+	return sessionID, userID, role, nil
 }
 
 func (h *orderHandlersHTTP) registerReqToOrderModel(r *dto.OrderCreateRequestDto, user *models.User, seller *models.Seller, product *models.Product) (*models.Order, error) {

@@ -368,14 +368,6 @@ paths:
         in: query
         name: page
         type: string
-      - description: user id
-        in: query
-        name: user_id
-        type: string
-      - description: seller id
-        in: query
-        name: seller_id
-        type: string
       produces:
       - application/json
       responses:
@@ -483,10 +475,6 @@ paths:
       - description: pagination page
         in: query
         name: page
-        type: string
-      - description: seller id
-        in: query
-        name: seller_id
         type: string
       produces:
       - application/json

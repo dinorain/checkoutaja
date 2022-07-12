@@ -50,18 +50,6 @@ const docTemplate = `{
                         "description": "pagination page",
                         "name": "page",
                         "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "user id",
-                        "name": "user_id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "seller id",
-                        "name": "seller_id",
-                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -235,12 +223,6 @@ const docTemplate = `{
                         "type": "string",
                         "description": "pagination page",
                         "name": "page",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "seller id",
-                        "name": "seller_id",
                         "in": "query"
                     }
                 ],
