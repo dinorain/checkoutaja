@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/jinzhu/copier"
 )
 
 const (
@@ -33,9 +32,13 @@ type Order struct {
 type OrderItem Product
 
 func (o *OrderItem) Scan(value interface{}) error {
+	val, ok := value.([]byte)
+	if !ok {
+		return fmt.Errorf("unable to scan")
+	}
 	var item OrderItem
-	if err := copier.Copy(&item, &value); err != nil {
-		fmt.Errorf("copier.Copy %v", value)
+	if err := json.Unmarshal(val, &item); err != nil {
+		return fmt.Errorf("json.Unmarshal %v", value)
 	}
 	*o = item
 	return nil
