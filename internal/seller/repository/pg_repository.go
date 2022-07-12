@@ -36,8 +36,9 @@ func (r *SellerRepository) Create(ctx context.Context, seller *models.Seller) (*
 		seller.Email,
 		seller.Password,
 		seller.Avatar,
+		seller.PickupAddress,
 	).StructScan(createdSeller); err != nil {
-		return nil, errors.Wrap(err, "Create.QueryRowxContext")
+		return nil, errors.Wrap(err, "SellerRepository.Create.QueryRowxContext")
 	}
 
 	return createdSeller, nil
@@ -54,12 +55,13 @@ func (r *SellerRepository) UpdateById(ctx context.Context, seller *models.Seller
 		seller.Email,
 		seller.Password,
 		seller.Avatar,
+		seller.PickupAddress,
 	); err != nil {
-		return nil, errors.Wrap(err, "Update.ExecContext")
+		return nil, errors.Wrap(err, "UpdateById.Update.ExecContext")
 	} else {
 		_, err := res.RowsAffected()
 		if err != nil {
-			return nil, errors.Wrap(err, "Update.RowsAffected")
+			return nil, errors.Wrap(err, "UpdateById.Update.RowsAffected")
 		}
 	}
 
@@ -70,7 +72,7 @@ func (r *SellerRepository) UpdateById(ctx context.Context, seller *models.Seller
 func (r *SellerRepository) FindAll(ctx context.Context, pagination *utils.Pagination) ([]models.Seller, error) {
 	var sellers []models.Seller
 	if err := r.db.SelectContext(ctx, &sellers, findAllQuery, pagination.GetLimit(), pagination.GetOffset()); err != nil {
-		return nil, errors.Wrap(err, "FindById.SelectContext")
+		return nil, errors.Wrap(err, "SellerRepository.FindById.SelectContext")
 	}
 
 	return sellers, nil
@@ -90,7 +92,7 @@ func (r *SellerRepository) FindByEmail(ctx context.Context, email string) (*mode
 func (r *SellerRepository) FindById(ctx context.Context, sellerID uuid.UUID) (*models.Seller, error) {
 	seller := &models.Seller{}
 	if err := r.db.GetContext(ctx, seller, findByIDQuery, sellerID); err != nil {
-		return nil, errors.Wrap(err, "FindById.GetContext")
+		return nil, errors.Wrap(err, "SellerRepository.FindById.GetContext")
 	}
 
 	return seller, nil
@@ -99,11 +101,11 @@ func (r *SellerRepository) FindById(ctx context.Context, sellerID uuid.UUID) (*m
 // DeleteById Find seller by uuid
 func (r *SellerRepository) DeleteById(ctx context.Context, sellerID uuid.UUID) error {
 	if res, err := r.db.ExecContext(ctx, deleteByIDQuery, sellerID); err != nil {
-		return errors.Wrap(err, "DeleteById.ExecContext")
+		return errors.Wrap(err, "SellerRepository.DeleteById.ExecContext")
 	} else {
 		cnt, err := res.RowsAffected()
 		if err != nil {
-			return errors.Wrap(err, "DeleteById.RowsAffected")
+			return errors.Wrap(err, "SellerRepository.DeleteById.RowsAffected")
 		} else if cnt == 0 {
 			return sql.ErrNoRows
 		}

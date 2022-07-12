@@ -9,11 +9,11 @@ import (
 
 // Product model
 type Product struct {
-	ProductID   uuid.UUID `json:"product_id" db:"product_id" validate:"omitempty"`
-	Name        string    `json:"name" db:"name" validate:"required,lte=30"`
-	Description string    `json:"description" db:"description" validate:"required,lte=250"`
-	Price       float64   `json:"price" db:"price" validate:"required"`
-	SellerID    uuid.UUID `json:"seller_id" db:"seller_id" validate:"omitempty"`
+	ProductID   uuid.UUID `json:"product_id" db:"product_id"`
+	Name        string    `json:"name" db:"name"`
+	Description string    `json:"description" db:"description"`
+	Price       float64   `json:"price" db:"price"`
+	SellerID    uuid.UUID `json:"seller_id" db:"seller_id"`
 	CreatedAt   time.Time `json:"created_at,omitempty" db:"created_at"`
 	UpdatedAt   time.Time `json:"updated_at,omitempty" db:"updated_at"`
 }

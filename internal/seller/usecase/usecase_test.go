@@ -31,11 +31,12 @@ func TestSellerUseCase_Register(t *testing.T) {
 
 	sellerID := uuid.New()
 	mockSeller := &models.Seller{
-		Email:     "email@gmail.com",
-		FirstName: "FirstName",
-		LastName:  "LastName",
-		Avatar:    nil,
-		Password:  "123456",
+		Email:         "email@gmail.com",
+		FirstName:     "FirstName",
+		LastName:      "LastName",
+		Avatar:        nil,
+		Password:      "123456",
+		PickupAddress: "PickupAddress",
 	}
 
 	ctx := context.Background()
@@ -43,12 +44,13 @@ func TestSellerUseCase_Register(t *testing.T) {
 	sellerPGRepository.EXPECT().FindByEmail(gomock.Any(), mockSeller.Email).Return(nil, sql.ErrNoRows)
 
 	sellerPGRepository.EXPECT().Create(gomock.Any(), mockSeller).Return(&models.Seller{
-		SellerID:  sellerID,
-		Email:     "email@gmail.com",
-		FirstName: "FirstName",
-		LastName:  "LastName",
-		Avatar:    nil,
-		Password:  "123456",
+		SellerID:      sellerID,
+		Email:         "email@gmail.com",
+		FirstName:     "FirstName",
+		LastName:      "LastName",
+		Avatar:        nil,
+		Password:      "123456",
+		PickupAddress: "PickupAddress",
 	}, nil)
 
 	createdSeller, err := sellerUC.Register(ctx, mockSeller)
@@ -72,12 +74,13 @@ func TestSellerUseCase_FindByEmail(t *testing.T) {
 
 	sellerID := uuid.New()
 	mockSeller := &models.Seller{
-		SellerID:  sellerID,
-		Email:     "email@gmail.com",
-		FirstName: "FirstName",
-		LastName:  "LastName",
-		Avatar:    nil,
-		Password:  "123456",
+		SellerID:      sellerID,
+		Email:         "email@gmail.com",
+		FirstName:     "FirstName",
+		LastName:      "LastName",
+		Avatar:        nil,
+		Password:      "123456",
+		PickupAddress: "PickupAddress",
 	}
 
 	ctx := context.Background()
@@ -105,12 +108,13 @@ func TestSellerUseCase_Login(t *testing.T) {
 
 	sellerID := uuid.New()
 	mockSeller := &models.Seller{
-		SellerID:  sellerID,
-		Email:     "email@gmail.com",
-		FirstName: "FirstName",
-		LastName:  "LastName",
-		Avatar:    nil,
-		Password:  "123456",
+		SellerID:      sellerID,
+		Email:         "email@gmail.com",
+		FirstName:     "FirstName",
+		LastName:      "LastName",
+		Avatar:        nil,
+		Password:      "123456",
+		PickupAddress: "PickupAddress",
 	}
 
 	ctx := context.Background()
@@ -118,6 +122,40 @@ func TestSellerUseCase_Login(t *testing.T) {
 	sellerPGRepository.EXPECT().FindByEmail(gomock.Any(), mockSeller.Email).Return(mockSeller, nil)
 	_, err := sellerUC.Login(ctx, mockSeller.Email, mockSeller.Password)
 	require.NotNil(t, err)
+}
+
+func TestSellerUseCase_FindByAll(t *testing.T) {
+	t.Parallel()
+
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	sellerPGRepository := mock.NewMockSellerPGRepository(ctrl)
+	sellerRedisRepository := mock.NewMockSellerRedisRepository(ctrl)
+	apiLogger := logger.NewAppLogger(nil)
+
+	cfg := &config.Config{}
+	sellerUC := NewSellerUseCase(cfg, apiLogger, sellerPGRepository, sellerRedisRepository)
+
+	sellerID := uuid.New()
+	mockSeller := &models.Seller{
+		SellerID:      sellerID,
+		Email:         "email@gmail.com",
+		FirstName:     "FirstName",
+		LastName:      "LastName",
+		Avatar:        nil,
+		Password:      "123456",
+		PickupAddress: "DeliveryAddress",
+	}
+
+	ctx := context.Background()
+
+	sellerPGRepository.EXPECT().FindAll(gomock.Any(), nil).AnyTimes().Return(append([]models.Seller{}, *mockSeller), nil)
+
+	sellers, err := sellerUC.FindAll(ctx, nil)
+	require.NoError(t, err)
+	require.NotNil(t, sellers)
+	require.Equal(t, len(sellers), 1)
 }
 
 func TestSellerUseCase_FindById(t *testing.T) {
@@ -135,12 +173,13 @@ func TestSellerUseCase_FindById(t *testing.T) {
 
 	sellerID := uuid.New()
 	mockSeller := &models.Seller{
-		SellerID:  sellerID,
-		Email:     "email@gmail.com",
-		FirstName: "FirstName",
-		LastName:  "LastName",
-		Avatar:    nil,
-		Password:  "123456",
+		SellerID:      sellerID,
+		Email:         "email@gmail.com",
+		FirstName:     "FirstName",
+		LastName:      "LastName",
+		Avatar:        nil,
+		Password:      "123456",
+		PickupAddress: "PickupAddress",
 	}
 
 	ctx := context.Background()
@@ -171,12 +210,13 @@ func TestSellerUseCase_CachedFindById(t *testing.T) {
 
 	sellerID := uuid.New()
 	mockSeller := &models.Seller{
-		SellerID:  sellerID,
-		Email:     "email@gmail.com",
-		FirstName: "FirstName",
-		LastName:  "LastName",
-		Avatar:    nil,
-		Password:  "123456",
+		SellerID:      sellerID,
+		Email:         "email@gmail.com",
+		FirstName:     "FirstName",
+		LastName:      "LastName",
+		Avatar:        nil,
+		Password:      "123456",
+		PickupAddress: "PickupAddress",
 	}
 
 	ctx := context.Background()
@@ -206,12 +246,13 @@ func TestSellerUseCase_UpdateById(t *testing.T) {
 
 	sellerID := uuid.New()
 	mockSeller := &models.Seller{
-		SellerID:  sellerID,
-		Email:     "email@gmail.com",
-		FirstName: "FirstName",
-		LastName:  "LastName",
-		Avatar:    nil,
-		Password:  "123456",
+		SellerID:      sellerID,
+		Email:         "email@gmail.com",
+		FirstName:     "FirstName",
+		LastName:      "LastName",
+		Avatar:        nil,
+		Password:      "123456",
+		PickupAddress: "PickupAddress",
 	}
 
 	ctx := context.Background()
@@ -240,12 +281,13 @@ func TestSellerUseCase_DeleteById(t *testing.T) {
 
 	sellerID := uuid.New()
 	mockSeller := &models.Seller{
-		SellerID:  sellerID,
-		Email:     "email@gmail.com",
-		FirstName: "FirstName",
-		LastName:  "LastName",
-		Avatar:    nil,
-		Password:  "123456",
+		SellerID:      sellerID,
+		Email:         "email@gmail.com",
+		FirstName:     "FirstName",
+		LastName:      "LastName",
+		Avatar:        nil,
+		Password:      "123456",
+		PickupAddress: "PickupAddress",
 	}
 
 	ctx := context.Background()
@@ -275,12 +317,13 @@ func TestSellerUseCase_GenerateTokenPair(t *testing.T) {
 
 	sellerID := uuid.New()
 	mockSeller := &models.Seller{
-		SellerID:  sellerID,
-		Email:     "email@gmail.com",
-		FirstName: "FirstName",
-		LastName:  "LastName",
-		Avatar:    nil,
-		Password:  "123456",
+		SellerID:      sellerID,
+		Email:         "email@gmail.com",
+		FirstName:     "FirstName",
+		LastName:      "LastName",
+		Avatar:        nil,
+		Password:      "123456",
+		PickupAddress: "PickupAddress",
 	}
 
 	at, rt, err := sellerUC.GenerateTokenPair(mockSeller, mockSeller.SellerID.String())

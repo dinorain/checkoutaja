@@ -31,12 +31,13 @@ func TestUserUseCase_Register(t *testing.T) {
 
 	userID := uuid.New()
 	mockUser := &models.User{
-		Email:     "email@gmail.com",
-		FirstName: "FirstName",
-		LastName:  "LastName",
-		Role:      "admin",
-		Avatar:    nil,
-		Password:  "123456",
+		Email:           "email@gmail.com",
+		FirstName:       "FirstName",
+		LastName:        "LastName",
+		Role:            "admin",
+		Avatar:          nil,
+		Password:        "123456",
+		DeliveryAddress: "DeliveryAddress",
 	}
 
 	ctx := context.Background()
@@ -44,13 +45,14 @@ func TestUserUseCase_Register(t *testing.T) {
 	userPGRepository.EXPECT().FindByEmail(gomock.Any(), mockUser.Email).Return(nil, sql.ErrNoRows)
 
 	userPGRepository.EXPECT().Create(gomock.Any(), mockUser).Return(&models.User{
-		UserID:    userID,
-		Email:     "email@gmail.com",
-		FirstName: "FirstName",
-		LastName:  "LastName",
-		Role:      "admin",
-		Avatar:    nil,
-		Password:  "123456",
+		UserID:          userID,
+		Email:           "email@gmail.com",
+		FirstName:       "FirstName",
+		LastName:        "LastName",
+		Role:            "admin",
+		Avatar:          nil,
+		Password:        "123456",
+		DeliveryAddress: "DeliveryAddress",
 	}, nil)
 
 	createdUser, err := userUC.Register(ctx, mockUser)
@@ -74,13 +76,14 @@ func TestUserUseCase_FindByEmail(t *testing.T) {
 
 	userID := uuid.New()
 	mockUser := &models.User{
-		UserID:    userID,
-		Email:     "email@gmail.com",
-		FirstName: "FirstName",
-		LastName:  "LastName",
-		Role:      "admin",
-		Avatar:    nil,
-		Password:  "123456",
+		UserID:          userID,
+		Email:           "email@gmail.com",
+		FirstName:       "FirstName",
+		LastName:        "LastName",
+		Role:            "admin",
+		Avatar:          nil,
+		Password:        "123456",
+		DeliveryAddress: "DeliveryAddress",
 	}
 
 	ctx := context.Background()
@@ -108,13 +111,14 @@ func TestUserUseCase_Login(t *testing.T) {
 
 	userID := uuid.New()
 	mockUser := &models.User{
-		UserID:    userID,
-		Email:     "email@gmail.com",
-		FirstName: "FirstName",
-		LastName:  "LastName",
-		Role:      "admin",
-		Avatar:    nil,
-		Password:  "123456",
+		UserID:          userID,
+		Email:           "email@gmail.com",
+		FirstName:       "FirstName",
+		LastName:        "LastName",
+		Role:            "admin",
+		Avatar:          nil,
+		Password:        "123456",
+		DeliveryAddress: "DeliveryAddress",
 	}
 
 	ctx := context.Background()
@@ -122,6 +126,41 @@ func TestUserUseCase_Login(t *testing.T) {
 	userPGRepository.EXPECT().FindByEmail(gomock.Any(), mockUser.Email).Return(mockUser, nil)
 	_, err := userUC.Login(ctx, mockUser.Email, mockUser.Password)
 	require.NotNil(t, err)
+}
+
+func TestUserUseCase_FindByAll(t *testing.T) {
+	t.Parallel()
+
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	userPGRepository := mock.NewMockUserPGRepository(ctrl)
+	userRedisRepository := mock.NewMockUserRedisRepository(ctrl)
+	apiLogger := logger.NewAppLogger(nil)
+
+	cfg := &config.Config{}
+	userUC := NewUserUseCase(cfg, apiLogger, userPGRepository, userRedisRepository)
+
+	userID := uuid.New()
+	mockUser := &models.User{
+		UserID:          userID,
+		Email:           "email@gmail.com",
+		FirstName:       "FirstName",
+		LastName:        "LastName",
+		Role:            "admin",
+		Avatar:          nil,
+		Password:        "123456",
+		DeliveryAddress: "DeliveryAddress",
+	}
+
+	ctx := context.Background()
+
+	userPGRepository.EXPECT().FindAll(gomock.Any(), nil).AnyTimes().Return(append([]models.User{}, *mockUser), nil)
+
+	users, err := userUC.FindAll(ctx, nil)
+	require.NoError(t, err)
+	require.NotNil(t, users)
+	require.Equal(t, len(users), 1)
 }
 
 func TestUserUseCase_FindById(t *testing.T) {
@@ -139,13 +178,14 @@ func TestUserUseCase_FindById(t *testing.T) {
 
 	userID := uuid.New()
 	mockUser := &models.User{
-		UserID:    userID,
-		Email:     "email@gmail.com",
-		FirstName: "FirstName",
-		LastName:  "LastName",
-		Role:      "admin",
-		Avatar:    nil,
-		Password:  "123456",
+		UserID:          userID,
+		Email:           "email@gmail.com",
+		FirstName:       "FirstName",
+		LastName:        "LastName",
+		Role:            "admin",
+		Avatar:          nil,
+		Password:        "123456",
+		DeliveryAddress: "DeliveryAddress",
 	}
 
 	ctx := context.Background()
@@ -176,13 +216,14 @@ func TestUserUseCase_CachedFindById(t *testing.T) {
 
 	userID := uuid.New()
 	mockUser := &models.User{
-		UserID:    userID,
-		Email:     "email@gmail.com",
-		FirstName: "FirstName",
-		LastName:  "LastName",
-		Role:      "admin",
-		Avatar:    nil,
-		Password:  "123456",
+		UserID:          userID,
+		Email:           "email@gmail.com",
+		FirstName:       "FirstName",
+		LastName:        "LastName",
+		Role:            "admin",
+		Avatar:          nil,
+		Password:        "123456",
+		DeliveryAddress: "DeliveryAddress",
 	}
 
 	ctx := context.Background()
@@ -212,13 +253,14 @@ func TestUserUseCase_UpdateById(t *testing.T) {
 
 	userID := uuid.New()
 	mockUser := &models.User{
-		UserID:    userID,
-		Email:     "email@gmail.com",
-		FirstName: "FirstName",
-		LastName:  "LastName",
-		Role:      "admin",
-		Avatar:    nil,
-		Password:  "123456",
+		UserID:          userID,
+		Email:           "email@gmail.com",
+		FirstName:       "FirstName",
+		LastName:        "LastName",
+		Role:            "admin",
+		Avatar:          nil,
+		Password:        "123456",
+		DeliveryAddress: "DeliveryAddress",
 	}
 
 	ctx := context.Background()
@@ -247,13 +289,14 @@ func TestUserUseCase_DeleteById(t *testing.T) {
 
 	userID := uuid.New()
 	mockUser := &models.User{
-		UserID:    userID,
-		Email:     "email@gmail.com",
-		FirstName: "FirstName",
-		LastName:  "LastName",
-		Role:      "admin",
-		Avatar:    nil,
-		Password:  "123456",
+		UserID:          userID,
+		Email:           "email@gmail.com",
+		FirstName:       "FirstName",
+		LastName:        "LastName",
+		Role:            "admin",
+		Avatar:          nil,
+		Password:        "123456",
+		DeliveryAddress: "DeliveryAddress",
 	}
 
 	ctx := context.Background()
@@ -283,13 +326,14 @@ func TestUserUseCase_GenerateTokenPair(t *testing.T) {
 
 	userID := uuid.New()
 	mockUser := &models.User{
-		UserID:    userID,
-		Email:     "email@gmail.com",
-		FirstName: "FirstName",
-		LastName:  "LastName",
-		Role:      "admin",
-		Avatar:    nil,
-		Password:  "123456",
+		UserID:          userID,
+		Email:           "email@gmail.com",
+		FirstName:       "FirstName",
+		LastName:        "LastName",
+		Role:            "admin",
+		Avatar:          nil,
+		Password:        "123456",
+		DeliveryAddress: "DeliveryAddress",
 	}
 
 	at, rt, err := userUC.GenerateTokenPair(mockUser, mockUser.UserID.String())

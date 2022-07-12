@@ -26,15 +26,16 @@ func TestSellerRepository_Create(t *testing.T) {
 
 	sellerPGRepository := NewSellerPGRepository(sqlxDB)
 
-	columns := []string{"seller_id", "first_name", "last_name", "email", "password", "avatar", "role", "created_at", "updated_at"}
+	columns := []string{"seller_id", "first_name", "last_name", "email", "password", "avatar", "pickup_address", "created_at", "updated_at"}
 	sellerUUID := uuid.New()
 	mockSeller := &models.Seller{
-		SellerID:  sellerUUID,
-		Email:     "email@gmail.com",
-		FirstName: "FirstName",
-		LastName:  "LastName",
-		Avatar:    nil,
-		Password:  "123456",
+		SellerID:      sellerUUID,
+		Email:         "email@gmail.com",
+		FirstName:     "FirstName",
+		LastName:      "LastName",
+		Avatar:        nil,
+		Password:      "123456",
+		PickupAddress: "PickupAddress",
 	}
 
 	rows := sqlmock.NewRows(columns).AddRow(
@@ -44,6 +45,7 @@ func TestSellerRepository_Create(t *testing.T) {
 		mockSeller.Email,
 		mockSeller.Password,
 		mockSeller.Avatar,
+		mockSeller.PickupAddress,
 		time.Now(),
 		time.Now(),
 	)
@@ -54,6 +56,7 @@ func TestSellerRepository_Create(t *testing.T) {
 		mockSeller.Email,
 		mockSeller.Password,
 		mockSeller.Avatar,
+		mockSeller.PickupAddress,
 	).WillReturnRows(rows)
 
 	createdSeller, err := sellerPGRepository.Create(context.Background(), mockSeller)
@@ -73,15 +76,16 @@ func TestSellerRepository_FindByEmail(t *testing.T) {
 
 	sellerPGRepository := NewSellerPGRepository(sqlxDB)
 
-	columns := []string{"seller_id", "first_name", "last_name", "email", "password", "avatar", "role", "created_at", "updated_at"}
+	columns := []string{"seller_id", "first_name", "last_name", "email", "password", "avatar", "pickup_address", "created_at", "updated_at"}
 	sellerUUID := uuid.New()
 	mockSeller := &models.Seller{
-		SellerID:  sellerUUID,
-		Email:     "email@gmail.com",
-		FirstName: "FirstName",
-		LastName:  "LastName",
-		Avatar:    nil,
-		Password:  "123456",
+		SellerID:      sellerUUID,
+		Email:         "email@gmail.com",
+		FirstName:     "FirstName",
+		LastName:      "LastName",
+		Avatar:        nil,
+		Password:      "123456",
+		PickupAddress: "PickupAddress",
 	}
 
 	rows := sqlmock.NewRows(columns).AddRow(
@@ -91,6 +95,7 @@ func TestSellerRepository_FindByEmail(t *testing.T) {
 		mockSeller.Email,
 		mockSeller.Password,
 		mockSeller.Avatar,
+		mockSeller.PickupAddress,
 		time.Now(),
 		time.Now(),
 	)
@@ -115,15 +120,16 @@ func TestSellerRepository_FindAll(t *testing.T) {
 
 	sellerPGRepository := NewSellerPGRepository(sqlxDB)
 
-	columns := []string{"seller_id", "first_name", "last_name", "email", "password", "avatar", "role", "created_at", "updated_at"}
+	columns := []string{"seller_id", "first_name", "last_name", "email", "password", "avatar", "pickup_address", "created_at", "updated_at"}
 	sellerUUID := uuid.New()
 	mockSeller := &models.Seller{
-		SellerID:  sellerUUID,
-		Email:     "email@gmail.com",
-		FirstName: "FirstName",
-		LastName:  "LastName",
-		Avatar:    nil,
-		Password:  "123456",
+		SellerID:      sellerUUID,
+		Email:         "email@gmail.com",
+		FirstName:     "FirstName",
+		LastName:      "LastName",
+		Avatar:        nil,
+		Password:      "123456",
+		PickupAddress: "PickupAddress",
 	}
 
 	rows := sqlmock.NewRows(columns).AddRow(
@@ -133,6 +139,7 @@ func TestSellerRepository_FindAll(t *testing.T) {
 		mockSeller.Email,
 		mockSeller.Password,
 		mockSeller.Avatar,
+		mockSeller.PickupAddress,
 		time.Now(),
 		time.Now(),
 	)
@@ -162,15 +169,16 @@ func TestSellerRepository_FindById(t *testing.T) {
 
 	sellerPGRepository := NewSellerPGRepository(sqlxDB)
 
-	columns := []string{"seller_id", "first_name", "last_name", "email", "password", "avatar", "role", "created_at", "updated_at"}
+	columns := []string{"seller_id", "first_name", "last_name", "email", "password", "avatar", "pickup_address", "created_at", "updated_at"}
 	sellerUUID := uuid.New()
 	mockSeller := &models.Seller{
-		SellerID:  sellerUUID,
-		Email:     "email@gmail.com",
-		FirstName: "FirstName",
-		LastName:  "LastName",
-		Avatar:    nil,
-		Password:  "123456",
+		SellerID:      sellerUUID,
+		Email:         "email@gmail.com",
+		FirstName:     "FirstName",
+		LastName:      "LastName",
+		Avatar:        nil,
+		Password:      "123456",
+		PickupAddress: "PickupAddress",
 	}
 
 	rows := sqlmock.NewRows(columns).AddRow(
@@ -180,6 +188,7 @@ func TestSellerRepository_FindById(t *testing.T) {
 		mockSeller.Email,
 		mockSeller.Password,
 		mockSeller.Avatar,
+		mockSeller.PickupAddress,
 		time.Now(),
 		time.Now(),
 	)
@@ -204,15 +213,16 @@ func TestSellerRepository_UpdateById(t *testing.T) {
 
 	sellerPGRepository := NewSellerPGRepository(sqlxDB)
 
-	columns := []string{"seller_id", "first_name", "last_name", "email", "password", "avatar", "role", "created_at", "updated_at"}
+	columns := []string{"seller_id", "first_name", "last_name", "email", "password", "avatar", "pickup_address", "created_at", "updated_at"}
 	sellerUUID := uuid.New()
 	mockSeller := &models.Seller{
-		SellerID:  sellerUUID,
-		Email:     "email@gmail.com",
-		FirstName: "FirstName",
-		LastName:  "LastName",
-		Avatar:    nil,
-		Password:  "123456",
+		SellerID:      sellerUUID,
+		Email:         "email@gmail.com",
+		FirstName:     "FirstName",
+		LastName:      "LastName",
+		Avatar:        nil,
+		Password:      "123456",
+		PickupAddress: "PickupAddress",
 	}
 
 	_ = sqlmock.NewRows(columns).AddRow(
@@ -222,6 +232,7 @@ func TestSellerRepository_UpdateById(t *testing.T) {
 		mockSeller.Email,
 		mockSeller.Password,
 		mockSeller.Avatar,
+		mockSeller.PickupAddress,
 		time.Now(),
 		time.Now(),
 	)
@@ -233,7 +244,9 @@ func TestSellerRepository_UpdateById(t *testing.T) {
 		mockSeller.LastName,
 		mockSeller.Email,
 		mockSeller.Password,
-		mockSeller.Avatar).WillReturnResult(sqlmock.NewResult(0, 1))
+		mockSeller.Avatar,
+		mockSeller.PickupAddress,
+	).WillReturnResult(sqlmock.NewResult(0, 1))
 
 	updatedSeller, err := sellerPGRepository.UpdateById(context.Background(), mockSeller)
 	require.NoError(t, err)
@@ -254,15 +267,16 @@ func TestSellerRepository_DeleteById(t *testing.T) {
 
 	sellerPGRepository := NewSellerPGRepository(sqlxDB)
 
-	columns := []string{"seller_id", "first_name", "last_name", "email", "password", "avatar", "role", "created_at", "updated_at"}
+	columns := []string{"seller_id", "first_name", "last_name", "email", "password", "avatar", "pickup_address", "created_at", "updated_at"}
 	sellerUUID := uuid.New()
 	mockSeller := &models.Seller{
-		SellerID:  sellerUUID,
-		Email:     "email@gmail.com",
-		FirstName: "FirstName",
-		LastName:  "LastName",
-		Avatar:    nil,
-		Password:  "123456",
+		SellerID:      sellerUUID,
+		Email:         "email@gmail.com",
+		FirstName:     "FirstName",
+		LastName:      "LastName",
+		Avatar:        nil,
+		Password:      "123456",
+		PickupAddress: "PickupAddress",
 	}
 
 	_ = sqlmock.NewRows(columns).AddRow(
@@ -272,6 +286,7 @@ func TestSellerRepository_DeleteById(t *testing.T) {
 		mockSeller.Email,
 		mockSeller.Password,
 		mockSeller.Avatar,
+		mockSeller.PickupAddress,
 		time.Now(),
 		time.Now(),
 	)

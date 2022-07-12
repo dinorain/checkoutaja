@@ -11,6 +11,7 @@ import (
 
 	"github.com/dinorain/checkoutaja/config"
 	"github.com/dinorain/checkoutaja/internal/models"
+	httpErrors "github.com/dinorain/checkoutaja/pkg/http_errors"
 	"github.com/dinorain/checkoutaja/pkg/logger"
 )
 
@@ -18,6 +19,7 @@ type MiddlewareManager interface {
 	RequestLoggerMiddleware(next echo.HandlerFunc) echo.HandlerFunc
 	IsLoggedIn() echo.MiddlewareFunc
 	IsSeller(next echo.HandlerFunc) echo.HandlerFunc
+	IsUser(next echo.HandlerFunc) echo.HandlerFunc
 	IsAdmin(next echo.HandlerFunc) echo.HandlerFunc
 }
 
@@ -57,7 +59,7 @@ func (mw *middlewareManager) IsAdmin(next echo.HandlerFunc) echo.HandlerFunc {
 		}
 
 		if role != models.UserRoleAdmin {
-			return echo.ErrForbidden
+			return httpErrors.NewForbiddenError(c, echo.ErrForbidden, mw.cfg.Http.DebugErrorsResponse)
 		}
 
 		return next(c)
@@ -82,7 +84,33 @@ func (mw *middlewareManager) IsSeller(next echo.HandlerFunc) echo.HandlerFunc {
 		}
 
 		if sellerID == "" {
-			return echo.ErrForbidden
+			return httpErrors.NewForbiddenError(c, echo.ErrForbidden, mw.cfg.Http.DebugErrorsResponse)
+		}
+
+		return next(c)
+	}
+}
+
+func (mw *middlewareManager) IsUser(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		user, ok := c.Get("user").(*jwt.Token)
+		if !ok {
+			mw.logger.Warnf("jwt.Token: %+v", c.Get("user"))
+			return errors.New("invalid token header")
+		}
+		claims := user.Claims.(jwt.MapClaims)
+		if !ok {
+			mw.logger.Warnf("jwt.MapClaims: %+v", c.Get("user"))
+			return errors.New("invalid token header")
+		}
+
+		role, ok := claims["role"].(string)
+		if !ok {
+			mw.logger.Warnf("role: %+v", claims)
+		}
+
+		if role != models.UserRoleUser {
+			return httpErrors.NewForbiddenError(c, echo.ErrForbidden, mw.cfg.Http.DebugErrorsResponse)
 		}
 
 		return next(c)

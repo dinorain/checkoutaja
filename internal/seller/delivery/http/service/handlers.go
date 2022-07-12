@@ -49,18 +49,18 @@ func NewSellerHandlersHTTP(
 // Register
 // @Tags Sellers
 // @Summary To register seller
-// @Description To create seller, admin only
+// @Description Admin create seller
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth
-// @Param payload body dto.RegisterRequestDto true "Payload"
-// @Success 200 {object} dto.RegisterResponseDto
+// @Param payload body dto.SellerRegisterRequestDto true "Payload"
+// @Success 200 {object} dto.SellerRegisterResponseDto
 // @Router /seller [post]
 func (h *sellerHandlersHTTP) Register() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		ctx := c.Request().Context()
 
-		createDto := &dto.RegisterRequestDto{}
+		createDto := &dto.SellerRegisterRequestDto{}
 		if err := c.Bind(createDto); err != nil {
 			h.logger.WarnMsg("bind", err)
 			return httpErrors.ErrorCtxResponse(c, err, h.cfg.Http.DebugErrorsResponse)
@@ -83,7 +83,7 @@ func (h *sellerHandlersHTTP) Register() echo.HandlerFunc {
 			return httpErrors.ErrorCtxResponse(c, err, h.cfg.Http.DebugErrorsResponse)
 		}
 
-		return c.JSON(http.StatusCreated, dto.RegisterResponseDto{SellerID: createdSeller.SellerID})
+		return c.JSON(http.StatusCreated, dto.SellerRegisterResponseDto{SellerID: createdSeller.SellerID})
 	}
 }
 
@@ -93,14 +93,14 @@ func (h *sellerHandlersHTTP) Register() echo.HandlerFunc {
 // @Description Seller login with email and password
 // @Accept json
 // @Produce json
-// @Param payload body dto.LoginRequestDto true "Payload"
-// @Success 200 {object} dto.LoginResponseDto
+// @Param payload body dto.SellerLoginRequestDto true "Payload"
+// @Success 200 {object} dto.SellerLoginResponseDto
 // @Router /seller/login [post]
 func (h *sellerHandlersHTTP) Login() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		ctx := c.Request().Context()
 
-		loginDto := &dto.LoginRequestDto{}
+		loginDto := &dto.SellerLoginRequestDto{}
 		if err := c.Bind(loginDto); err != nil {
 			h.logger.WarnMsg("bind", err)
 			return httpErrors.ErrorCtxResponse(c, err, h.cfg.Http.DebugErrorsResponse)
@@ -136,7 +136,7 @@ func (h *sellerHandlersHTTP) Login() echo.HandlerFunc {
 			return err
 		}
 
-		return c.JSON(http.StatusCreated, dto.LoginResponseDto{SellerID: seller.SellerID, Tokens: &dto.RefreshTokenResponseDto{
+		return c.JSON(http.StatusCreated, dto.SellerLoginResponseDto{SellerID: seller.SellerID, Tokens: &dto.SellerRefreshTokenResponseDto{
 			AccessToken:  accessToken,
 			RefreshToken: refreshToken,
 		}})
@@ -146,13 +146,13 @@ func (h *sellerHandlersHTTP) Login() echo.HandlerFunc {
 // FindAll
 // @Tags Sellers
 // @Summary Find all sellers
-// @Description Find all sellers, admin only
+// @Description Admin find all sellers
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth
 // @Param size query string false "pagination size"
 // @Param page query string false "pagination page"
-// @Success 200 {object} dto.FindSellerResponseDto
+// @Success 200 {object} dto.SellerFindResponseDto
 // @Router /seller [get]
 func (h *sellerHandlersHTTP) FindAll() echo.HandlerFunc {
 	return func(c echo.Context) error {
@@ -164,7 +164,7 @@ func (h *sellerHandlersHTTP) FindAll() echo.HandlerFunc {
 			return httpErrors.ErrorCtxResponse(c, err, h.cfg.Http.DebugErrorsResponse)
 		}
 
-		return c.JSON(http.StatusOK, dto.FindSellerResponseDto{
+		return c.JSON(http.StatusOK, dto.SellerFindResponseDto{
 			Data: sellers,
 			Meta: utils.PaginationMetaDto{
 				Limit:  pq.GetLimit(),
@@ -212,6 +212,7 @@ func (h *sellerHandlersHTTP) FindByID() echo.HandlerFunc {
 // @Produce json
 // @Security ApiKeyAuth
 // @Param id path string true "Seller ID"
+// @Param payload body dto.SellerUpdateRequestDto true "Payload"
 // @Success 200 {object} dto.SellerResponseDto
 // @Router /seller/{id} [put]
 func (h *sellerHandlersHTTP) UpdateByID() echo.HandlerFunc {
@@ -224,7 +225,17 @@ func (h *sellerHandlersHTTP) UpdateByID() echo.HandlerFunc {
 			return httpErrors.ErrorCtxResponse(c, err, h.cfg.Http.DebugErrorsResponse)
 		}
 
-		updateDto := &dto.UpdateRequestDto{}
+		_, sellerID, role, err := h.getSessionIDFromCtx(c)
+		if err != nil {
+			h.logger.Errorf("getSessionIDFromCtx: %v", err)
+			return httpErrors.ErrorCtxResponse(c, err, h.cfg.Http.DebugErrorsResponse)
+		}
+
+		if role != models.UserRoleAdmin && sellerID != sellerUUID.String() {
+			return httpErrors.NewForbiddenError(c, err, h.cfg.Http.DebugErrorsResponse)
+		}
+
+		updateDto := &dto.SellerUpdateRequestDto{}
 		if err := c.Bind(updateDto); err != nil {
 			h.logger.WarnMsg("bind", err)
 			return httpErrors.ErrorCtxResponse(c, err, h.cfg.Http.DebugErrorsResponse)
@@ -298,7 +309,7 @@ func (h *sellerHandlersHTTP) DeleteByID() echo.HandlerFunc {
 func (h *sellerHandlersHTTP) GetMe() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		ctx := c.Request().Context()
-		sessID, err := h.getSessionIDFromCtx(c)
+		sessID, _, _, err := h.getSessionIDFromCtx(c)
 		if err != nil {
 			h.logger.Errorf("getSessionIDFromCtx: %v", err)
 			return httpErrors.ErrorCtxResponse(c, err, h.cfg.Http.DebugErrorsResponse)
@@ -308,7 +319,7 @@ func (h *sellerHandlersHTTP) GetMe() echo.HandlerFunc {
 		if err != nil {
 			h.logger.Errorf("sessUC.GetSessionByID: %v", err)
 			if errors.Is(err, redis.Nil) {
-				return echo.ErrUnauthorized
+				return httpErrors.NewUnauthorizedError(c, err, h.cfg.Http.DebugErrorsResponse)
 			}
 			return httpErrors.ErrorCtxResponse(c, err, h.cfg.Http.DebugErrorsResponse)
 		}
@@ -335,7 +346,7 @@ func (h *sellerHandlersHTTP) GetMe() echo.HandlerFunc {
 func (h *sellerHandlersHTTP) Logout() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		ctx := c.Request().Context()
-		sessID, err := h.getSessionIDFromCtx(c)
+		sessID, _, _, err := h.getSessionIDFromCtx(c)
 		if err != nil {
 			h.logger.Errorf("getSessionIDFromCtx: %v", err)
 			return httpErrors.ErrorCtxResponse(c, err, h.cfg.Http.DebugErrorsResponse)
@@ -356,14 +367,14 @@ func (h *sellerHandlersHTTP) Logout() echo.HandlerFunc {
 // @Description Refresh access token
 // @Accept json
 // @Produce json
-// @Param payload body dto.RefreshTokenDto true "Payload"
-// @Success 200 {object} dto.RefreshTokenResponseDto
+// @Param payload body dto.SellerRefreshTokenDto true "Payload"
+// @Success 200 {object} dto.SellerRefreshTokenResponseDto
 // @Router /seller/refresh [post]
 func (h *sellerHandlersHTTP) RefreshToken() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		ctx := c.Request().Context()
 
-		refreshTokenDto := &dto.RefreshTokenDto{}
+		refreshTokenDto := &dto.SellerRefreshTokenDto{}
 		if err := c.Bind(refreshTokenDto); err != nil {
 			h.logger.WarnMsg("bind", err)
 			return httpErrors.ErrorCtxResponse(c, err, h.cfg.Http.DebugErrorsResponse)
@@ -420,42 +431,46 @@ func (h *sellerHandlersHTTP) RefreshToken() echo.HandlerFunc {
 			return err
 		}
 
-		return c.JSON(http.StatusOK, dto.RefreshTokenResponseDto{
+		return c.JSON(http.StatusOK, dto.SellerRefreshTokenResponseDto{
 			AccessToken:  accessToken,
 			RefreshToken: refreshToken,
 		})
 	}
 }
 
-func (h *sellerHandlersHTTP) getSessionIDFromCtx(c echo.Context) (string, error) {
-	seller, ok := c.Get("seller").(*jwt.Token)
+func (h *sellerHandlersHTTP) getSessionIDFromCtx(c echo.Context) (sessionID string, sellerID string, role string, err error) {
+	user, ok := c.Get("user").(*jwt.Token)
 	if !ok {
-		h.logger.Warnf("jwt.Token: %+v", c.Get("seller"))
-		return "", errors.New("invalid token header")
+		h.logger.Warnf("jwt.Token: %+v", c.Get("user"))
+		return "", "", "", errors.New("invalid token header")
 	}
 
-	claims, ok := seller.Claims.(jwt.MapClaims)
+	claims, ok := user.Claims.(jwt.MapClaims)
 	if !ok {
-		h.logger.Warnf("jwt.MapClaims: %+v", c.Get("seller"))
-		return "", errors.New("invalid token header")
+		h.logger.Warnf("jwt.MapClaims: %+v", c.Get("user"))
+		return "", "", "", errors.New("invalid token header")
 	}
 
-	sessionID, ok := claims["session_id"].(string)
+	sessionID, ok = claims["session_id"].(string)
 	if !ok {
 		h.logger.Warnf("session_id: %+v", claims)
-		return "", errors.New("invalid token header")
+		return "", "", "", errors.New("invalid token header")
 	}
 
-	return sessionID, nil
+	sellerID, _ = claims["seller_id"].(string)
+	role, _ = claims["role"].(string)
+
+	return sessionID, sellerID, role, nil
 }
 
-func (h *sellerHandlersHTTP) registerReqToSellerModel(r *dto.RegisterRequestDto) (*models.Seller, error) {
+func (h *sellerHandlersHTTP) registerReqToSellerModel(r *dto.SellerRegisterRequestDto) (*models.Seller, error) {
 	sellerCandidate := &models.Seller{
-		Email:     r.Email,
-		FirstName: r.FirstName,
-		LastName:  r.LastName,
-		Avatar:    &r.Avatar,
-		Password:  r.Password,
+		Email:         r.Email,
+		FirstName:     r.FirstName,
+		LastName:      r.LastName,
+		Avatar:        nil,
+		Password:      r.Password,
+		PickupAddress: r.PickupAddress,
 	}
 
 	if err := sellerCandidate.PrepareCreate(); err != nil {
@@ -465,13 +480,20 @@ func (h *sellerHandlersHTTP) registerReqToSellerModel(r *dto.RegisterRequestDto)
 	return sellerCandidate, nil
 }
 
-func (h *sellerHandlersHTTP) updateReqToSellerModel(updateCandidate *models.Seller, r *dto.UpdateRequestDto) (*models.Seller, error) {
+func (h *sellerHandlersHTTP) updateReqToSellerModel(updateCandidate *models.Seller, r *dto.SellerUpdateRequestDto) (*models.Seller, error) {
 
 	if r.FirstName != nil {
 		updateCandidate.FirstName = strings.TrimSpace(*r.FirstName)
 	}
 	if r.LastName != nil {
 		updateCandidate.LastName = strings.TrimSpace(*r.LastName)
+	}
+	if r.PickupAddress != nil {
+		updateCandidate.PickupAddress = strings.TrimSpace(*r.PickupAddress)
+	}
+	if r.Avatar != nil {
+		avatar := strings.TrimSpace(*r.Avatar)
+		updateCandidate.Avatar = &avatar
 	}
 	if r.Password != nil {
 		updateCandidate.Password = *r.Password

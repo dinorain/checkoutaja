@@ -21,7 +21,7 @@ import (
 // @name                        Authorization
 
 func main() {
-	log.Println("Starting auth microservice")
+	log.Println("Starting checkoutaja service")
 
 	configPath := utils.GetConfigPath(os.Getenv("CONFIG"))
 	cfg, err := config.GetConfig(configPath)
