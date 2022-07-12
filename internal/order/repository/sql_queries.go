@@ -13,6 +13,8 @@ const (
 
 	findAllBySellerIDQuery = `SELECT order_id, user_id, seller_id, item, quantity, total_price, status, delivery_source_address, delivery_destination_address, created_at, updated_at FROM orders WHERE seller_id = $1 LIMIT $2 OFFSET $3`
 
+	findAllByUserIDSellerIDQuery = `SELECT order_id, user_id, seller_id, item, quantity, total_price, status, delivery_source_address, delivery_destination_address, created_at, updated_at FROM orders WHERE user_id = $1 AND seller_id = $2 LIMIT $3 OFFSET $4`
+
 	updateByIDQuery = `UPDATE orders SET user_id = $2, seller_id = $3, item = $4, quantity = $5, total_price = $6, status = $7, delivery_source_address = $8, delivery_destination_address = $9 WHERE order_id = $1
 		RETURNING order_id, user_id, seller_id, item, quantity, total_price, status, delivery_source_address, delivery_destination_address, created_at, updated_at`
 

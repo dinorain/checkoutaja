@@ -137,16 +137,44 @@ func (h *orderHandlersHTTP) Create() echo.HandlerFunc {
 // @Security ApiKeyAuth
 // @Param size query string false "pagination size"
 // @Param page query string false "pagination page"
+// @Param user_id query string false "user id"
+// @Param seller_id query string false "seller id"
 // @Success 200 {object} dto.OrderFindResponseDto
 // @Router /order [get]
 func (h *orderHandlersHTTP) FindAll() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		ctx := c.Request().Context()
 		pq := utils.NewPaginationFromQueryParams(c.QueryParam(constants.Size), c.QueryParam(constants.Page))
-		orders, err := h.orderUC.FindAll(ctx, pq)
-		if err != nil {
-			h.logger.Errorf("orderUC.FindAll: %v", err)
-			return httpErrors.ErrorCtxResponse(c, err, h.cfg.Http.DebugErrorsResponse)
+
+		var orders []models.Order
+		if c.QueryParam("user_id") != "" && c.QueryParam("seller_id") != "" {
+			if res, err := h.orderUC.FindAllByUserIdSellerId(ctx, c.QueryParam("user_id"), c.QueryParam("seller_id"), pq); err != nil {
+				h.logger.Errorf("orderUC.FindAllBySellerId: %v", err)
+				return httpErrors.ErrorCtxResponse(c, err, h.cfg.Http.DebugErrorsResponse)
+			} else {
+				orders = res
+			}
+		} else if c.QueryParam("seller_id") != "" {
+			if res, err := h.orderUC.FindAllBySellerId(ctx, c.QueryParam("seller_id"), pq); err != nil {
+				h.logger.Errorf("orderUC.FindAllBySellerId: %v", err)
+				return httpErrors.ErrorCtxResponse(c, err, h.cfg.Http.DebugErrorsResponse)
+			} else {
+				orders = res
+			}
+		} else if c.QueryParam("user_id") != "" {
+			if res, err := h.orderUC.FindAllBySellerId(ctx, c.QueryParam("seller_id"), pq); err != nil {
+				h.logger.Errorf("orderUC.FindAllBySellerId: %v", err)
+				return httpErrors.ErrorCtxResponse(c, err, h.cfg.Http.DebugErrorsResponse)
+			} else {
+				orders = res
+			}
+		} else {
+			if res, err := h.orderUC.FindAll(ctx, pq); err != nil {
+				h.logger.Errorf("orderUC.FindAll: %v", err)
+				return httpErrors.ErrorCtxResponse(c, err, h.cfg.Http.DebugErrorsResponse)
+			} else {
+				orders = res
+			}
 		}
 
 		return c.JSON(http.StatusOK, dto.OrderFindResponseDto{

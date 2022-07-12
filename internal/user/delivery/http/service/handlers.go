@@ -415,7 +415,7 @@ func (h *userHandlersHTTP) RefreshToken() echo.HandlerFunc {
 		if err != nil {
 			h.logger.Errorf("sessUC.GetSessionByID: %v", err)
 			if errors.Is(err, redis.Nil) {
-				return httpErrors.ErrorCtxResponse(c, err, h.cfg.Http.DebugErrorsResponse)
+				return httpErrors.NewUnauthorizedError(c, err, h.cfg.Http.DebugErrorsResponse)
 			}
 			return httpErrors.ErrorCtxResponse(c, err, h.cfg.Http.DebugErrorsResponse)
 		}
@@ -469,7 +469,7 @@ func (h *userHandlersHTTP) getSessionIDFromCtx(c echo.Context) (sessionID string
 		return "", "", "", errors.New("invalid token header")
 	}
 
-	return sessionID, role, userID, nil
+	return sessionID, userID, role, nil
 }
 
 func (h *userHandlersHTTP) registerReqToUserModel(r *dto.UserRegisterRequestDto) (*models.User, error) {

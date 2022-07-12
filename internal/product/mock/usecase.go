@@ -96,6 +96,21 @@ func (mr *MockProductUseCaseMockRecorder) FindAll(ctx, pagination interface{}) *
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindAll", reflect.TypeOf((*MockProductUseCase)(nil).FindAll), ctx, pagination)
 }
 
+// FindAllBySellerId mocks base method.
+func (m *MockProductUseCase) FindAllBySellerId(ctx context.Context, sellerId string, pagination *utils.Pagination) ([]models.Product, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindAllBySellerId", ctx, sellerId, pagination)
+	ret0, _ := ret[0].([]models.Product)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindAllBySellerId indicates an expected call of FindAllBySellerId.
+func (mr *MockProductUseCaseMockRecorder) FindAllBySellerId(ctx, sellerId, pagination interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindAllBySellerId", reflect.TypeOf((*MockProductUseCase)(nil).FindAllBySellerId), ctx, sellerId, pagination)
+}
+
 // FindById mocks base method.
 func (m *MockProductUseCase) FindById(ctx context.Context, userID uuid.UUID) (*models.Product, error) {
 	m.ctrl.T.Helper()

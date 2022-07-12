@@ -110,16 +110,29 @@ func (h *productHandlersHTTP) Create() echo.HandlerFunc {
 // @Security ApiKeyAuth
 // @Param size query string false "pagination size"
 // @Param page query string false "pagination page"
+// @Param seller_id query string false "seller id"
 // @Success 200 {object} dto.ProductFindResponseDto
 // @Router /product [get]
 func (h *productHandlersHTTP) FindAll() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		ctx := c.Request().Context()
 		pq := utils.NewPaginationFromQueryParams(c.QueryParam(constants.Size), c.QueryParam(constants.Page))
-		products, err := h.productUC.FindAll(ctx, pq)
-		if err != nil {
-			h.logger.Errorf("productUC.FindAll: %v", err)
-			return httpErrors.ErrorCtxResponse(c, err, h.cfg.Http.DebugErrorsResponse)
+
+		var products []models.Product
+		if c.QueryParam("seller_id") != "" {
+			if res, err := h.productUC.FindAllBySellerId(ctx, c.QueryParam("seller_id"), pq); err != nil {
+				h.logger.Errorf("productUC.FindAllBySellerId: %v", err)
+				return httpErrors.ErrorCtxResponse(c, err, h.cfg.Http.DebugErrorsResponse)
+			} else {
+				products = res
+			}
+		} else {
+			if res, err := h.productUC.FindAll(ctx, pq); err != nil {
+				h.logger.Errorf("productUC.FindAll: %v", err)
+				return httpErrors.ErrorCtxResponse(c, err, h.cfg.Http.DebugErrorsResponse)
+			} else {
+				products = res
+			}
 		}
 
 		return c.JSON(http.StatusOK, dto.ProductFindResponseDto{

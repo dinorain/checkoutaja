@@ -10,7 +10,6 @@ import (
 
 	"github.com/dinorain/checkoutaja/internal/models"
 	"github.com/dinorain/checkoutaja/internal/user"
-	"github.com/dinorain/checkoutaja/pkg/grpc_errors"
 	"github.com/dinorain/checkoutaja/pkg/logger"
 )
 
@@ -32,9 +31,6 @@ func NewUserRedisRepo(redisClient *redis.Client, logger logger.Logger) *userRedi
 func (r *userRedisRepo) GetByIDCtx(ctx context.Context, key string) (*models.User, error) {
 	userBytes, err := r.redisClient.Get(ctx, r.createKey(key)).Bytes()
 	if err != nil {
-		if err != redis.Nil {
-			return nil, grpc_errors.ErrNotFound
-		}
 		return nil, err
 	}
 	user := &models.User{}

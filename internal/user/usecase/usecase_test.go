@@ -128,7 +128,7 @@ func TestUserUseCase_Login(t *testing.T) {
 	require.NotNil(t, err)
 }
 
-func TestUserUseCase_FindByAll(t *testing.T) {
+func TestUserUseCase_FindAll(t *testing.T) {
 	t.Parallel()
 
 	ctrl := gomock.NewController(t)

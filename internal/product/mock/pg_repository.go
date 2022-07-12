@@ -82,7 +82,7 @@ func (mr *MockProductPGRepositoryMockRecorder) FindAll(ctx, pagination interface
 }
 
 // FindAllBySellerId mocks base method.
-func (m *MockProductPGRepository) FindAllBySellerId(ctx context.Context, sellerID uuid.UUID, pagination *utils.Pagination) ([]models.Product, error) {
+func (m *MockProductPGRepository) FindAllBySellerId(ctx context.Context, sellerID string, pagination *utils.Pagination) ([]models.Product, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindAllBySellerId", ctx, sellerID, pagination)
 	ret0, _ := ret[0].([]models.Product)

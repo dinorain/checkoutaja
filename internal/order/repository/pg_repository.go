@@ -83,7 +83,7 @@ func (r *OrderRepository) FindAll(ctx context.Context, pagination *utils.Paginat
 }
 
 // FindAllByUserId Find orders by user uuid
-func (r *OrderRepository) FindAllByUserId(ctx context.Context, userID uuid.UUID, pagination *utils.Pagination) ([]models.Order, error) {
+func (r *OrderRepository) FindAllByUserId(ctx context.Context, userID string, pagination *utils.Pagination) ([]models.Order, error) {
 	var orders []models.Order
 	if err := r.db.SelectContext(ctx, &orders, findByUserIDQuery, userID, pagination.GetLimit(), pagination.GetOffset()); err != nil {
 		return nil, errors.Wrap(err, "OrderPGRepository.FindAllByUserId.SelectContext")
@@ -93,10 +93,20 @@ func (r *OrderRepository) FindAllByUserId(ctx context.Context, userID uuid.UUID,
 }
 
 // FindAllBySellerId Find orders by seller uuid
-func (r *OrderRepository) FindAllBySellerId(ctx context.Context, sellerID uuid.UUID, pagination *utils.Pagination) ([]models.Order, error) {
+func (r *OrderRepository) FindAllBySellerId(ctx context.Context, sellerID string, pagination *utils.Pagination) ([]models.Order, error) {
 	var orders []models.Order
 	if err := r.db.SelectContext(ctx, &orders, findAllBySellerIDQuery, sellerID, pagination.GetLimit(), pagination.GetOffset()); err != nil {
 		return nil, errors.Wrap(err, "OrderPGRepository.FindAllBySellerId.SelectContext")
+	}
+
+	return orders, nil
+}
+
+// FindAllByUserIdSellerId Find orders by user uuid and seller uuid
+func (r *OrderRepository) FindAllByUserIdSellerId(ctx context.Context, userID string, sellerID string, pagination *utils.Pagination) ([]models.Order, error) {
+	var orders []models.Order
+	if err := r.db.SelectContext(ctx, &orders, findAllByUserIDSellerIDQuery, userID, sellerID, pagination.GetLimit(), pagination.GetOffset()); err != nil {
+		return nil, errors.Wrap(err, "OrderPGRepository.FindAllByUserIdSellerId.SelectContext")
 	}
 
 	return orders, nil

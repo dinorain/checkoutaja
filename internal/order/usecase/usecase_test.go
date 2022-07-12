@@ -76,7 +76,7 @@ func TestOrderUseCase_Create(t *testing.T) {
 	require.Equal(t, createdOrder.OrderID, orderUUID)
 }
 
-func TestOrderUseCase_FindByAll(t *testing.T) {
+func TestOrderUseCase_FindAll(t *testing.T) {
 	t.Parallel()
 
 	ctrl := gomock.NewController(t)
@@ -116,6 +116,141 @@ func TestOrderUseCase_FindByAll(t *testing.T) {
 	sellerPGRepository.EXPECT().FindAll(gomock.Any(), nil).AnyTimes().Return(append([]models.Order{}, *mockOrder), nil)
 
 	sellers, err := sellerUC.FindAll(ctx, nil)
+	require.NoError(t, err)
+	require.NotNil(t, sellers)
+	require.Equal(t, len(sellers), 1)
+}
+
+func TestOrderUseCase_FindAllBySellerId(t *testing.T) {
+	t.Parallel()
+
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	sellerPGRepository := mock.NewMockOrderPGRepository(ctrl)
+	sellerRedisRepository := mock.NewMockOrderRedisRepository(ctrl)
+	apiLogger := logger.NewAppLogger(nil)
+
+	cfg := &config.Config{}
+	sellerUC := NewOrderUseCase(cfg, apiLogger, sellerPGRepository, sellerRedisRepository)
+
+	orderUUID := uuid.New()
+	userUUID := uuid.New()
+	sellerUUID := uuid.New()
+	productUUID := uuid.New()
+	mockOrder := &models.Order{
+		OrderID:  orderUUID,
+		UserID:   userUUID,
+		SellerID: sellerUUID,
+		Item: models.OrderItem{
+			ProductID:   productUUID,
+			Name:        "Name",
+			Description: "Description",
+			Price:       10000.00,
+			SellerID:    sellerUUID,
+		},
+		Quantity:                   1,
+		TotalPrice:                 10000.0,
+		Status:                     models.OrderStatusPending,
+		DeliverySourceAddress:      "DeliverySourceAddress",
+		DeliveryDestinationAddress: "DeliveryDestinationAddress",
+	}
+
+	ctx := context.Background()
+
+	sellerPGRepository.EXPECT().FindAllBySellerId(gomock.Any(), mockOrder.SellerID.String(), nil).AnyTimes().Return(append([]models.Order{}, *mockOrder), nil)
+
+	sellers, err := sellerUC.FindAllBySellerId(ctx, mockOrder.SellerID.String(), nil)
+	require.NoError(t, err)
+	require.NotNil(t, sellers)
+	require.Equal(t, len(sellers), 1)
+}
+
+func TestOrderUseCase_FindAllByUserId(t *testing.T) {
+	t.Parallel()
+
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	sellerPGRepository := mock.NewMockOrderPGRepository(ctrl)
+	sellerRedisRepository := mock.NewMockOrderRedisRepository(ctrl)
+	apiLogger := logger.NewAppLogger(nil)
+
+	cfg := &config.Config{}
+	sellerUC := NewOrderUseCase(cfg, apiLogger, sellerPGRepository, sellerRedisRepository)
+
+	orderUUID := uuid.New()
+	userUUID := uuid.New()
+	sellerUUID := uuid.New()
+	productUUID := uuid.New()
+	mockOrder := &models.Order{
+		OrderID:  orderUUID,
+		UserID:   userUUID,
+		SellerID: sellerUUID,
+		Item: models.OrderItem{
+			ProductID:   productUUID,
+			Name:        "Name",
+			Description: "Description",
+			Price:       10000.00,
+			SellerID:    sellerUUID,
+		},
+		Quantity:                   1,
+		TotalPrice:                 10000.0,
+		Status:                     models.OrderStatusPending,
+		DeliverySourceAddress:      "DeliverySourceAddress",
+		DeliveryDestinationAddress: "DeliveryDestinationAddress",
+	}
+
+	ctx := context.Background()
+
+	sellerPGRepository.EXPECT().FindAllByUserId(gomock.Any(), mockOrder.UserID.String(), nil).AnyTimes().Return(append([]models.Order{}, *mockOrder), nil)
+
+	sellers, err := sellerUC.FindAllByUserId(ctx, mockOrder.UserID.String(), nil)
+	require.NoError(t, err)
+	require.NotNil(t, sellers)
+	require.Equal(t, len(sellers), 1)
+}
+
+func TestOrderUseCase_FindAllByUserSellerId(t *testing.T) {
+	t.Parallel()
+
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	sellerPGRepository := mock.NewMockOrderPGRepository(ctrl)
+	sellerRedisRepository := mock.NewMockOrderRedisRepository(ctrl)
+	apiLogger := logger.NewAppLogger(nil)
+
+	cfg := &config.Config{}
+	sellerUC := NewOrderUseCase(cfg, apiLogger, sellerPGRepository, sellerRedisRepository)
+
+	orderUUID := uuid.New()
+	userUUID := uuid.New()
+	sellerUUID := uuid.New()
+	productUUID := uuid.New()
+	mockOrder := &models.Order{
+		OrderID:  orderUUID,
+		UserID:   userUUID,
+		SellerID: sellerUUID,
+		Item: models.OrderItem{
+			ProductID:   productUUID,
+			Name:        "Name",
+			Description: "Description",
+			Price:       10000.00,
+			SellerID:    sellerUUID,
+		},
+		Quantity:                   1,
+		TotalPrice:                 10000.0,
+		Status:                     models.OrderStatusPending,
+		DeliverySourceAddress:      "DeliverySourceAddress",
+		DeliveryDestinationAddress: "DeliveryDestinationAddress",
+	}
+
+	ctx := context.Background()
+
+	sellerPGRepository.EXPECT().FindAllByUserIdSellerId(gomock.Any(), mockOrder.UserID.String(), mockOrder.SellerID.String(), nil).AnyTimes().Return(append([]models.Order{}, *mockOrder), nil)
+
+	sellers, err := sellerUC.FindAllByUserIdSellerId(ctx, mockOrder.UserID.String(), mockOrder.SellerID.String(), nil)
 	require.NoError(t, err)
 	require.NotNil(t, sellers)
 	require.Equal(t, len(sellers), 1)

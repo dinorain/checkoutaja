@@ -53,7 +53,7 @@ func TestProductUseCase_Create(t *testing.T) {
 	require.Equal(t, createdProduct.ProductID, productID)
 }
 
-func TestProductUseCase_FindByAll(t *testing.T) {
+func TestProductUseCase_FindAll(t *testing.T) {
 	t.Parallel()
 
 	ctrl := gomock.NewController(t)
@@ -81,6 +81,39 @@ func TestProductUseCase_FindByAll(t *testing.T) {
 	sellerPGRepository.EXPECT().FindAll(gomock.Any(), nil).AnyTimes().Return(append([]models.Product{}, *mockProduct), nil)
 
 	sellers, err := sellerUC.FindAll(ctx, nil)
+	require.NoError(t, err)
+	require.NotNil(t, sellers)
+	require.Equal(t, len(sellers), 1)
+}
+
+func TestProductUseCase_FindAllBySellerId(t *testing.T) {
+	t.Parallel()
+
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	sellerPGRepository := mock.NewMockProductPGRepository(ctrl)
+	sellerRedisRepository := mock.NewMockProductRedisRepository(ctrl)
+	apiLogger := logger.NewAppLogger(nil)
+
+	cfg := &config.Config{}
+	sellerUC := NewProductUseCase(cfg, apiLogger, sellerPGRepository, sellerRedisRepository)
+
+	productID := uuid.New()
+	sellerUUID := uuid.New()
+	mockProduct := &models.Product{
+		ProductID:   productID,
+		Name:        "Name",
+		Description: "Description",
+		Price:       10000.00,
+		SellerID:    sellerUUID,
+	}
+
+	ctx := context.Background()
+
+	sellerPGRepository.EXPECT().FindAllBySellerId(gomock.Any(), sellerUUID.String(), nil).AnyTimes().Return(append([]models.Product{}, *mockProduct), nil)
+
+	sellers, err := sellerUC.FindAllBySellerId(ctx, sellerUUID.String(), nil)
 	require.NoError(t, err)
 	require.NotNil(t, sellers)
 	require.Equal(t, len(sellers), 1)

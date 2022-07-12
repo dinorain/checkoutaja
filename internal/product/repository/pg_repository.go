@@ -75,7 +75,7 @@ func (r *ProductRepository) FindAll(ctx context.Context, pagination *utils.Pagin
 }
 
 // FindAllBySellerId Find products by seller uuid
-func (r *ProductRepository) FindAllBySellerId(ctx context.Context, sellerID uuid.UUID, pagination *utils.Pagination) ([]models.Product, error) {
+func (r *ProductRepository) FindAllBySellerId(ctx context.Context, sellerID string, pagination *utils.Pagination) ([]models.Product, error) {
 	var products []models.Product
 	if err := r.db.SelectContext(ctx, &products, findAllBySellerIDQuery, sellerID, pagination.GetLimit(), pagination.GetOffset()); err != nil {
 		return nil, errors.Wrap(err, "ProductPGRepository.FindAllBySellerId.SelectContext")

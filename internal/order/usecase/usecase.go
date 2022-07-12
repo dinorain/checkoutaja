@@ -49,7 +49,7 @@ func (u *orderUseCase) FindAll(ctx context.Context, pagination *utils.Pagination
 }
 
 // FindAllByUserId find orders by user id
-func (u *orderUseCase) FindAllByUserId(ctx context.Context, userId uuid.UUID, pagination *utils.Pagination) ([]models.Order, error) {
+func (u *orderUseCase) FindAllByUserId(ctx context.Context, userId string, pagination *utils.Pagination) ([]models.Order, error) {
 	orders, err := u.orderPgRepo.FindAllByUserId(ctx, userId, pagination)
 	if err != nil {
 		return nil, errors.Wrap(err, "orderPgRepo.FindAllByUserId")
@@ -59,10 +59,20 @@ func (u *orderUseCase) FindAllByUserId(ctx context.Context, userId uuid.UUID, pa
 }
 
 // FindAllBySellerId find orders by seller id
-func (u *orderUseCase) FindAllBySellerId(ctx context.Context, sellerId uuid.UUID, pagination *utils.Pagination) ([]models.Order, error) {
-	orders, err := u.orderPgRepo.FindAllByUserId(ctx, sellerId, pagination)
+func (u *orderUseCase) FindAllBySellerId(ctx context.Context, sellerId string, pagination *utils.Pagination) ([]models.Order, error) {
+	orders, err := u.orderPgRepo.FindAllBySellerId(ctx, sellerId, pagination)
 	if err != nil {
 		return nil, errors.Wrap(err, "orderPgRepo.FindAllByUserId")
+	}
+
+	return orders, nil
+}
+
+// FindAllByUserIdSellerId find orders by seller id
+func (u *orderUseCase) FindAllByUserIdSellerId(ctx context.Context, userId string, sellerId string, pagination *utils.Pagination) ([]models.Order, error) {
+	orders, err := u.orderPgRepo.FindAllByUserIdSellerId(ctx, userId, sellerId, pagination)
+	if err != nil {
+		return nil, errors.Wrap(err, "orderPgRepo.FindAllByUserIdSellerId")
 	}
 
 	return orders, nil
