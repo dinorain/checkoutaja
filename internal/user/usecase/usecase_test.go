@@ -190,7 +190,7 @@ func TestUserUseCase_FindById(t *testing.T) {
 
 	ctx := context.Background()
 
-	userRedisRepository.EXPECT().GetByIDCtx(gomock.Any(), mockUser.UserID.String()).AnyTimes().Return(nil, redis.Nil)
+	userRedisRepository.EXPECT().GetByIdCtx(gomock.Any(), mockUser.UserID.String()).AnyTimes().Return(nil, redis.Nil)
 	userPGRepository.EXPECT().FindById(gomock.Any(), mockUser.UserID).Return(mockUser, nil)
 
 	user, err := userUC.FindById(ctx, mockUser.UserID)
@@ -198,7 +198,7 @@ func TestUserUseCase_FindById(t *testing.T) {
 	require.NotNil(t, user)
 	require.Equal(t, user.UserID, mockUser.UserID)
 
-	userRedisRepository.EXPECT().GetByIDCtx(gomock.Any(), mockUser.UserID.String()).AnyTimes().Return(nil, redis.Nil)
+	userRedisRepository.EXPECT().GetByIdCtx(gomock.Any(), mockUser.UserID.String()).AnyTimes().Return(nil, redis.Nil)
 }
 
 func TestUserUseCase_CachedFindById(t *testing.T) {
@@ -228,7 +228,7 @@ func TestUserUseCase_CachedFindById(t *testing.T) {
 
 	ctx := context.Background()
 
-	userRedisRepository.EXPECT().GetByIDCtx(gomock.Any(), mockUser.UserID.String()).AnyTimes().Return(nil, redis.Nil)
+	userRedisRepository.EXPECT().GetByIdCtx(gomock.Any(), mockUser.UserID.String()).AnyTimes().Return(nil, redis.Nil)
 	userPGRepository.EXPECT().FindById(gomock.Any(), mockUser.UserID).Return(mockUser, nil)
 	userRedisRepository.EXPECT().SetUserCtx(gomock.Any(), mockUser.UserID.String(), 3600, mockUser).AnyTimes().Return(nil)
 
@@ -308,7 +308,7 @@ func TestUserUseCase_DeleteById(t *testing.T) {
 	require.NoError(t, err)
 
 	userPGRepository.EXPECT().FindById(gomock.Any(), mockUser.UserID).AnyTimes().Return(nil, nil)
-	userRedisRepository.EXPECT().GetByIDCtx(gomock.Any(), mockUser.UserID.String()).AnyTimes().Return(nil, redis.Nil)
+	userRedisRepository.EXPECT().GetByIdCtx(gomock.Any(), mockUser.UserID.String()).AnyTimes().Return(nil, redis.Nil)
 }
 
 func TestUserUseCase_GenerateTokenPair(t *testing.T) {

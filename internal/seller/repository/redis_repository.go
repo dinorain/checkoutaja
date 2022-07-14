@@ -28,7 +28,7 @@ func NewSellerRedisRepo(redisClient *redis.Client, logger logger.Logger) *seller
 }
 
 // Get seller by id
-func (r *sellerRedisRepo) GetByIDCtx(ctx context.Context, key string) (*models.Seller, error) {
+func (r *sellerRedisRepo) GetByIdCtx(ctx context.Context, key string) (*models.Seller, error) {
 	sellerBytes, err := r.redisClient.Get(ctx, r.createKey(key)).Bytes()
 	if err != nil {
 		return nil, err

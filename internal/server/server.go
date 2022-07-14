@@ -14,21 +14,24 @@ import (
 
 	"github.com/dinorain/checkoutaja/config"
 	"github.com/dinorain/checkoutaja/internal/middlewares"
-	orderDeliveryHTTP "github.com/dinorain/checkoutaja/internal/order/delivery/http/service"
-	orderRepository "github.com/dinorain/checkoutaja/internal/order/repository"
-	orderUseCase "github.com/dinorain/checkoutaja/internal/order/usecase"
-	productDeliveryHTTP "github.com/dinorain/checkoutaja/internal/product/delivery/http/service"
-	productRepository "github.com/dinorain/checkoutaja/internal/product/repository"
-	productUseCase "github.com/dinorain/checkoutaja/internal/product/usecase"
-	sellerDeliveryHTTP "github.com/dinorain/checkoutaja/internal/seller/delivery/http/service"
-	sellerRepository "github.com/dinorain/checkoutaja/internal/seller/repository"
-	sellerUseCase "github.com/dinorain/checkoutaja/internal/seller/usecase"
-	sessRepository "github.com/dinorain/checkoutaja/internal/session/repository"
-	sessUseCase "github.com/dinorain/checkoutaja/internal/session/usecase"
-	userDeliveryHTTP "github.com/dinorain/checkoutaja/internal/user/delivery/http/service"
-	userRepository "github.com/dinorain/checkoutaja/internal/user/repository"
-	userUseCase "github.com/dinorain/checkoutaja/internal/user/usecase"
 	"github.com/dinorain/checkoutaja/pkg/logger"
+
+	orderDeliveryHTTP "github.com/dinorain/checkoutaja/internal/order/delivery/http/handlers"
+	productDeliveryHTTP "github.com/dinorain/checkoutaja/internal/product/delivery/http/handlers"
+	sellerDeliveryHTTP "github.com/dinorain/checkoutaja/internal/seller/delivery/http/handlers"
+	userDeliveryHTTP "github.com/dinorain/checkoutaja/internal/user/delivery/http/handlers"
+
+	orderUseCase "github.com/dinorain/checkoutaja/internal/order/usecase"
+	productUseCase "github.com/dinorain/checkoutaja/internal/product/usecase"
+	sellerUseCase "github.com/dinorain/checkoutaja/internal/seller/usecase"
+	sessUseCase "github.com/dinorain/checkoutaja/internal/session/usecase"
+	userUseCase "github.com/dinorain/checkoutaja/internal/user/usecase"
+
+	orderRepository "github.com/dinorain/checkoutaja/internal/order/repository"
+	productRepository "github.com/dinorain/checkoutaja/internal/product/repository"
+	sellerRepository "github.com/dinorain/checkoutaja/internal/seller/repository"
+	sessRepository "github.com/dinorain/checkoutaja/internal/session/repository"
+	userRepository "github.com/dinorain/checkoutaja/internal/user/repository"
 )
 
 type Server struct {
@@ -42,7 +45,7 @@ type Server struct {
 }
 
 // Server constructor
-func NewAuthServer(logger logger.Logger, cfg *config.Config, db *sqlx.DB, redisClient *redis.Client) *Server {
+func NewAppServer(logger logger.Logger, cfg *config.Config, db *sqlx.DB, redisClient *redis.Client) *Server {
 	return &Server{
 		logger:      logger,
 		cfg:         cfg,

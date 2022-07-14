@@ -1,4 +1,4 @@
-package http
+package handlers
 
 import (
 	"errors"
@@ -33,6 +33,8 @@ type sellerHandlersHTTP struct {
 	sellerUC seller.SellerUseCase
 	sessUC   session.SessUseCase
 }
+
+var _ seller.SellerHandlers = (*sellerHandlersHTTP)(nil)
 
 func NewSellerHandlersHTTP(
 	group *echo.Group,
@@ -175,7 +177,7 @@ func (h *sellerHandlersHTTP) FindAll() echo.HandlerFunc {
 	}
 }
 
-// FindByID
+// FindById
 // @Tags Sellers
 // @Summary Find seller
 // @Description Find existing seller by id
@@ -184,7 +186,7 @@ func (h *sellerHandlersHTTP) FindAll() echo.HandlerFunc {
 // @Security ApiKeyAuth
 // @Success 200 {object} dto.SellerResponseDto
 // @Router /seller/{id} [get]
-func (h *sellerHandlersHTTP) FindByID() echo.HandlerFunc {
+func (h *sellerHandlersHTTP) FindById() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		ctx := c.Request().Context()
 
@@ -204,7 +206,7 @@ func (h *sellerHandlersHTTP) FindByID() echo.HandlerFunc {
 	}
 }
 
-// UpdateByID
+// UpdateById
 // @Tags Sellers
 // @Summary Update seller
 // @Description Update existing seller
@@ -215,7 +217,7 @@ func (h *sellerHandlersHTTP) FindByID() echo.HandlerFunc {
 // @Param payload body dto.SellerUpdateRequestDto true "Payload"
 // @Success 200 {object} dto.SellerResponseDto
 // @Router /seller/{id} [put]
-func (h *sellerHandlersHTTP) UpdateByID() echo.HandlerFunc {
+func (h *sellerHandlersHTTP) UpdateById() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		ctx := c.Request().Context()
 
@@ -268,7 +270,7 @@ func (h *sellerHandlersHTTP) UpdateByID() echo.HandlerFunc {
 	}
 }
 
-// DeleteByID
+// DeleteById
 // @Tags Sellers
 // @Summary Delete seller
 // @Description Delete existing seller, admin only
@@ -278,7 +280,7 @@ func (h *sellerHandlersHTTP) UpdateByID() echo.HandlerFunc {
 // @Success 200 {object} nil
 // @Param id path string true "Seller ID"
 // @Router /seller/{id} [delete]
-func (h *sellerHandlersHTTP) DeleteByID() echo.HandlerFunc {
+func (h *sellerHandlersHTTP) DeleteById() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		ctx := c.Request().Context()
 
@@ -315,9 +317,9 @@ func (h *sellerHandlersHTTP) GetMe() echo.HandlerFunc {
 			return httpErrors.ErrorCtxResponse(c, err, h.cfg.Http.DebugErrorsResponse)
 		}
 
-		session, err := h.sessUC.GetSessionByID(ctx, sessID)
+		session, err := h.sessUC.GetSessionById(ctx, sessID)
 		if err != nil {
-			h.logger.Errorf("sessUC.GetSessionByID: %v", err)
+			h.logger.Errorf("sessUC.GetSessionById: %v", err)
 			if errors.Is(err, redis.Nil) {
 				return httpErrors.NewUnauthorizedError(c, nil, h.cfg.Http.DebugErrorsResponse)
 			}
@@ -352,8 +354,8 @@ func (h *sellerHandlersHTTP) Logout() echo.HandlerFunc {
 			return httpErrors.ErrorCtxResponse(c, err, h.cfg.Http.DebugErrorsResponse)
 		}
 
-		if err := h.sessUC.DeleteByID(ctx, sessID); err != nil {
-			h.logger.Errorf("sessUC.DeleteByID: %v", err)
+		if err := h.sessUC.DeleteById(ctx, sessID); err != nil {
+			h.logger.Errorf("sessUC.DeleteById: %v", err)
 			return httpErrors.ErrorCtxResponse(c, err, h.cfg.Http.DebugErrorsResponse)
 		}
 
@@ -411,9 +413,9 @@ func (h *sellerHandlersHTTP) RefreshToken() echo.HandlerFunc {
 			return httpErrors.ErrorCtxResponse(c, errors.New("invalid refresh token"), h.cfg.Http.DebugErrorsResponse)
 		}
 
-		session, err := h.sessUC.GetSessionByID(ctx, sessID)
+		session, err := h.sessUC.GetSessionById(ctx, sessID)
 		if err != nil {
-			h.logger.Errorf("sessUC.GetSessionByID: %v", err)
+			h.logger.Errorf("sessUC.GetSessionById: %v", err)
 			if errors.Is(err, redis.Nil) {
 				return httpErrors.NewUnauthorizedError(c, nil, h.cfg.Http.DebugErrorsResponse)
 			}

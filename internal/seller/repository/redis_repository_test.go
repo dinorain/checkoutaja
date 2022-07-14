@@ -41,12 +41,12 @@ func TestSellerRedisRepo_SetSellerCtx(t *testing.T) {
 	})
 }
 
-func TestSellerRedisRepo_GetByIDCtx(t *testing.T) {
+func TestSellerRedisRepo_GetByIdCtx(t *testing.T) {
 	t.Parallel()
 
 	redisRepo := SetupRedis()
 
-	t.Run("GetByIDCtx", func(t *testing.T) {
+	t.Run("GetByIdCtx", func(t *testing.T) {
 		seller := &models.Seller{
 			SellerID: uuid.New(),
 		}
@@ -54,7 +54,7 @@ func TestSellerRedisRepo_GetByIDCtx(t *testing.T) {
 		err := redisRepo.SetSellerCtx(context.Background(), redisRepo.createKey(seller.SellerID.String()), 10, seller)
 		require.NoError(t, err)
 
-		seller, err = redisRepo.GetByIDCtx(context.Background(), redisRepo.createKey(seller.SellerID.String()))
+		seller, err = redisRepo.GetByIdCtx(context.Background(), redisRepo.createKey(seller.SellerID.String()))
 		require.NoError(t, err)
 		require.NotNil(t, seller)
 	})

@@ -76,9 +76,9 @@ func (h *productHandlersHTTP) Create() echo.HandlerFunc {
 			return httpErrors.ErrorCtxResponse(c, err, h.cfg.Http.DebugErrorsResponse)
 		}
 
-		session, err := h.sessUC.GetSessionByID(ctx, sessID)
+		session, err := h.sessUC.GetSessionById(ctx, sessID)
 		if err != nil {
-			h.logger.Errorf("sessUC.GetSessionByID: %v", err)
+			h.logger.Errorf("sessUC.GetSessionById: %v", err)
 			if errors.Is(err, redis.Nil) {
 				return httpErrors.NewUnauthorizedError(c, nil, h.cfg.Http.DebugErrorsResponse)
 			}
@@ -151,7 +151,7 @@ func (h *productHandlersHTTP) FindAll() echo.HandlerFunc {
 	}
 }
 
-// FindByID
+// FindById
 // @Tags Products
 // @Summary Find product
 // @Description Find existing product by id
@@ -160,7 +160,7 @@ func (h *productHandlersHTTP) FindAll() echo.HandlerFunc {
 // @Security ApiKeyAuth
 // @Success 200 {object} dto.ProductResponseDto
 // @Router /product/{id} [get]
-func (h *productHandlersHTTP) FindByID() echo.HandlerFunc {
+func (h *productHandlersHTTP) FindById() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		ctx := c.Request().Context()
 
@@ -180,7 +180,7 @@ func (h *productHandlersHTTP) FindByID() echo.HandlerFunc {
 	}
 }
 
-// UpdateByID
+// UpdateById
 // @Tags Products
 // @Summary Update product
 // @Description Update existing product
@@ -191,7 +191,7 @@ func (h *productHandlersHTTP) FindByID() echo.HandlerFunc {
 // @Param payload body dto.ProductUpdateRequestDto true "Payload"
 // @Success 200 {object} dto.ProductResponseDto
 // @Router /product/{id} [put]
-func (h *productHandlersHTTP) UpdateByID() echo.HandlerFunc {
+func (h *productHandlersHTTP) UpdateById() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		ctx := c.Request().Context()
 
@@ -234,7 +234,7 @@ func (h *productHandlersHTTP) UpdateByID() echo.HandlerFunc {
 	}
 }
 
-// DeleteByID
+// DeleteById
 // @Tags Products
 // @Summary Delete product
 // @Description Delete existing product
@@ -244,7 +244,7 @@ func (h *productHandlersHTTP) UpdateByID() echo.HandlerFunc {
 // @Success 200 {object} nil
 // @Param id path string true "Product ID"
 // @Router /product/{id} [delete]
-func (h *productHandlersHTTP) DeleteByID() echo.HandlerFunc {
+func (h *productHandlersHTTP) DeleteById() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		ctx := c.Request().Context()
 

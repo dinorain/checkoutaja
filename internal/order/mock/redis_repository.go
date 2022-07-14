@@ -49,19 +49,19 @@ func (mr *MockOrderRedisRepositoryMockRecorder) DeleteOrderCtx(ctx, key interfac
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteOrderCtx", reflect.TypeOf((*MockOrderRedisRepository)(nil).DeleteOrderCtx), ctx, key)
 }
 
-// GetByIDCtx mocks base method.
-func (m *MockOrderRedisRepository) GetByIDCtx(ctx context.Context, key string) (*models.Order, error) {
+// GetByIdCtx mocks base method.
+func (m *MockOrderRedisRepository) GetByIdCtx(ctx context.Context, key string) (*models.Order, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetByIDCtx", ctx, key)
+	ret := m.ctrl.Call(m, "GetByIdCtx", ctx, key)
 	ret0, _ := ret[0].(*models.Order)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// GetByIDCtx indicates an expected call of GetByIDCtx.
-func (mr *MockOrderRedisRepositoryMockRecorder) GetByIDCtx(ctx, key interface{}) *gomock.Call {
+// GetByIdCtx indicates an expected call of GetByIdCtx.
+func (mr *MockOrderRedisRepositoryMockRecorder) GetByIdCtx(ctx, key interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetByIDCtx", reflect.TypeOf((*MockOrderRedisRepository)(nil).GetByIDCtx), ctx, key)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetByIdCtx", reflect.TypeOf((*MockOrderRedisRepository)(nil).GetByIdCtx), ctx, key)
 }
 
 // SetOrderCtx mocks base method.

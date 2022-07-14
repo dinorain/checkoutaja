@@ -150,24 +150,24 @@ func TestProductRepository_FindAllBySellerId(t *testing.T) {
 	)
 
 	size := 10
-	mock.ExpectQuery(findAllBySellerIDQuery).WithArgs(mockProduct.SellerID, size, 0).WillReturnRows(rows)
+	mock.ExpectQuery(findAllBySellerIdQuery).WithArgs(mockProduct.SellerID, size, 0).WillReturnRows(rows)
 	foundProducts, err := productPGRepository.FindAllBySellerId(context.Background(), mockProduct.SellerID, utils.NewPaginationQuery(size, 1))
 	require.NoError(t, err)
 	require.NotNil(t, foundProducts)
 	require.Equal(t, len(foundProducts), 1)
 
-	mock.ExpectQuery(findAllBySellerIDQuery).WithArgs(mockProduct.SellerID, size, 10).WillReturnRows(rows)
+	mock.ExpectQuery(findAllBySellerIdQuery).WithArgs(mockProduct.SellerID, size, 10).WillReturnRows(rows)
 	foundProducts, err = productPGRepository.FindAllBySellerId(context.Background(), mockProduct.SellerID, utils.NewPaginationQuery(size, 2))
 	require.NoError(t, err)
 	require.Nil(t, foundProducts)
 
-	mock.ExpectQuery(findAllBySellerIDQuery).WithArgs(otherUUID, size, 0).WillReturnRows(otherRows)
+	mock.ExpectQuery(findAllBySellerIdQuery).WithArgs(otherUUID, size, 0).WillReturnRows(otherRows)
 	foundProducts, err = productPGRepository.FindAllBySellerId(context.Background(), otherUUID, utils.NewPaginationQuery(size, 1))
 	require.NoError(t, err)
 	require.NotNil(t, foundProducts)
 	require.Equal(t, len(foundProducts), 1)
 
-	mock.ExpectQuery(findAllBySellerIDQuery).WithArgs(otherUUID, size, 10).WillReturnRows(otherRows)
+	mock.ExpectQuery(findAllBySellerIdQuery).WithArgs(otherUUID, size, 10).WillReturnRows(otherRows)
 	foundProducts, err = productPGRepository.FindAllBySellerId(context.Background(), otherUUID, utils.NewPaginationQuery(size, 2))
 	require.NoError(t, err)
 	require.Nil(t, foundProducts)
@@ -206,7 +206,7 @@ func TestProductRepository_FindById(t *testing.T) {
 		time.Now(),
 	)
 
-	mock.ExpectQuery(findByIDQuery).WithArgs(mockProduct.ProductID).WillReturnRows(rows)
+	mock.ExpectQuery(findByIdQuery).WithArgs(mockProduct.ProductID).WillReturnRows(rows)
 
 	foundProduct, err := productPGRepository.FindById(context.Background(), mockProduct.ProductID)
 	require.NoError(t, err)
@@ -248,7 +248,7 @@ func TestProductRepository_UpdateById(t *testing.T) {
 	)
 
 	mockProduct.Name = "NameChanged"
-	mock.ExpectExec(updateByIDQuery).WithArgs(
+	mock.ExpectExec(updateByIdQuery).WithArgs(
 		mockProduct.ProductID,
 		mockProduct.Name,
 		mockProduct.Description,
@@ -296,7 +296,7 @@ func TestProductRepository_DeleteById(t *testing.T) {
 		time.Now(),
 	)
 
-	mock.ExpectExec(deleteByIDQuery).WithArgs(mockProduct.ProductID).WillReturnResult(sqlmock.NewResult(0, 1))
+	mock.ExpectExec(deleteByIdQuery).WithArgs(mockProduct.ProductID).WillReturnResult(sqlmock.NewResult(0, 1))
 
 	err = productPGRepository.DeleteById(context.Background(), mockProduct.ProductID)
 	require.NoError(t, err)

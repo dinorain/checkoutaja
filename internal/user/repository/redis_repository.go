@@ -13,7 +13,6 @@ import (
 	"github.com/dinorain/checkoutaja/pkg/logger"
 )
 
-// Auth redis repository
 type userRedisRepo struct {
 	redisClient *redis.Client
 	basePrefix  string
@@ -22,13 +21,12 @@ type userRedisRepo struct {
 
 var _ user.UserRedisRepository = (*userRedisRepo)(nil)
 
-// Auth redis repository constructor
 func NewUserRedisRepo(redisClient *redis.Client, logger logger.Logger) *userRedisRepo {
 	return &userRedisRepo{redisClient: redisClient, basePrefix: "user:", logger: logger}
 }
 
 // Get user by id
-func (r *userRedisRepo) GetByIDCtx(ctx context.Context, key string) (*models.User, error) {
+func (r *userRedisRepo) GetByIdCtx(ctx context.Context, key string) (*models.User, error) {
 	userBytes, err := r.redisClient.Get(ctx, r.createKey(key)).Bytes()
 	if err != nil {
 		return nil, err

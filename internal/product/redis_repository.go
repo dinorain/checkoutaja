@@ -9,7 +9,7 @@ import (
 
 // Product Redis repository interface
 type ProductRedisRepository interface {
-	GetByIDCtx(ctx context.Context, key string) (*models.Product, error)
+	GetByIdCtx(ctx context.Context, key string) (*models.Product, error)
 	SetProductCtx(ctx context.Context, key string, seconds int, user *models.Product) error
 	DeleteProductCtx(ctx context.Context, key string) error
 }

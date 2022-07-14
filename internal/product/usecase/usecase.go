@@ -50,7 +50,7 @@ func (u *productUseCase) FindAll(ctx context.Context, pagination *utils.Paginati
 
 // FindAllBySellerId find products by seller id
 func (u *productUseCase) FindAllBySellerId(ctx context.Context, sellerID uuid.UUID, pagination *utils.Pagination) ([]models.Product, error) {
-	products, err := u.productPgRepo.FindAllBySellerId(ctx, sellerId, pagination)
+	products, err := u.productPgRepo.FindAllBySellerId(ctx, sellerID, pagination)
 	if err != nil {
 		return nil, errors.Wrap(err, "productPgRepo.FindAllBySellerId")
 	}
@@ -70,9 +70,9 @@ func (u *productUseCase) FindById(ctx context.Context, productID uuid.UUID) (*mo
 
 // CachedFindById find product by uuid from cache
 func (u *productUseCase) CachedFindById(ctx context.Context, productID uuid.UUID) (*models.Product, error) {
-	cachedProduct, err := u.redisRepo.GetByIDCtx(ctx, productID.String())
+	cachedProduct, err := u.redisRepo.GetByIdCtx(ctx, productID.String())
 	if err != nil && !errors.Is(err, redis.Nil) {
-		u.logger.Errorf("redisRepo.GetByIDCtx", err)
+		u.logger.Errorf("redisRepo.GetByIdCtx", err)
 	}
 	if cachedProduct != nil {
 		return cachedProduct, nil

@@ -80,9 +80,9 @@ func (u *sellerUseCase) FindById(ctx context.Context, sellerID uuid.UUID) (*mode
 
 // CachedFindById find seller by uuid from cache
 func (u *sellerUseCase) CachedFindById(ctx context.Context, sellerID uuid.UUID) (*models.Seller, error) {
-	cachedSeller, err := u.redisRepo.GetByIDCtx(ctx, sellerID.String())
+	cachedSeller, err := u.redisRepo.GetByIdCtx(ctx, sellerID.String())
 	if err != nil && !errors.Is(err, redis.Nil) {
-		u.logger.Errorf("redisRepo.GetByIDCtx", err)
+		u.logger.Errorf("redisRepo.GetByIdCtx", err)
 	}
 	if cachedSeller != nil {
 		return cachedSeller, nil
