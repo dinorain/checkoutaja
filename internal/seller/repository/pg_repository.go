@@ -48,7 +48,7 @@ func (r *SellerRepository) Create(ctx context.Context, seller *models.Seller) (*
 func (r *SellerRepository) UpdateById(ctx context.Context, seller *models.Seller) (*models.Seller, error) {
 	if res, err := r.db.ExecContext(
 		ctx,
-		updateByIDQuery,
+		updateByIdQuery,
 		seller.SellerID,
 		seller.FirstName,
 		seller.LastName,
@@ -91,7 +91,7 @@ func (r *SellerRepository) FindByEmail(ctx context.Context, email string) (*mode
 // FindById Find seller by uuid
 func (r *SellerRepository) FindById(ctx context.Context, sellerID uuid.UUID) (*models.Seller, error) {
 	seller := &models.Seller{}
-	if err := r.db.GetContext(ctx, seller, findByIDQuery, sellerID); err != nil {
+	if err := r.db.GetContext(ctx, seller, findByIdQuery, sellerID); err != nil {
 		return nil, errors.Wrap(err, "SellerRepository.FindById.GetContext")
 	}
 
@@ -100,7 +100,7 @@ func (r *SellerRepository) FindById(ctx context.Context, sellerID uuid.UUID) (*m
 
 // DeleteById Find seller by uuid
 func (r *SellerRepository) DeleteById(ctx context.Context, sellerID uuid.UUID) error {
-	if res, err := r.db.ExecContext(ctx, deleteByIDQuery, sellerID); err != nil {
+	if res, err := r.db.ExecContext(ctx, deleteByIdQuery, sellerID); err != nil {
 		return errors.Wrap(err, "SellerRepository.DeleteById.ExecContext")
 	} else {
 		cnt, err := res.RowsAffected()

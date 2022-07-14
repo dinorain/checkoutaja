@@ -28,7 +28,7 @@ func NewOrderRedisRepo(redisClient *redis.Client, logger logger.Logger) *orderRe
 }
 
 // Get order by id
-func (r *orderRedisRepo) GetByIDCtx(ctx context.Context, key string) (*models.Order, error) {
+func (r *orderRedisRepo) GetByIdCtx(ctx context.Context, key string) (*models.Order, error) {
 	orderBytes, err := r.redisClient.Get(ctx, r.createKey(key)).Bytes()
 	if err != nil {
 		return nil, err

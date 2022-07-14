@@ -90,9 +90,9 @@ func (u *orderUseCase) FindById(ctx context.Context, orderID uuid.UUID) (*models
 
 // CachedFindById find order by uuid from cache
 func (u *orderUseCase) CachedFindById(ctx context.Context, orderID uuid.UUID) (*models.Order, error) {
-	cachedOrder, err := u.redisRepo.GetByIDCtx(ctx, orderID.String())
+	cachedOrder, err := u.redisRepo.GetByIdCtx(ctx, orderID.String())
 	if err != nil && !errors.Is(err, redis.Nil) {
-		u.logger.Errorf("redisRepo.GetByIDCtx", err)
+		u.logger.Errorf("redisRepo.GetByIdCtx", err)
 	}
 	if cachedOrder != nil {
 		return cachedOrder, nil

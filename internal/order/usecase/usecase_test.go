@@ -293,7 +293,7 @@ func TestOrderUseCase_FindById(t *testing.T) {
 
 	ctx := context.Background()
 
-	orderRedisRepository.EXPECT().GetByIDCtx(gomock.Any(), mockOrder.OrderID.String()).AnyTimes().Return(nil, redis.Nil)
+	orderRedisRepository.EXPECT().GetByIdCtx(gomock.Any(), mockOrder.OrderID.String()).AnyTimes().Return(nil, redis.Nil)
 	orderPGRepository.EXPECT().FindById(gomock.Any(), mockOrder.OrderID).Return(mockOrder, nil)
 
 	order, err := orderUC.FindById(ctx, mockOrder.OrderID)
@@ -301,7 +301,7 @@ func TestOrderUseCase_FindById(t *testing.T) {
 	require.NotNil(t, order)
 	require.Equal(t, order.OrderID, mockOrder.OrderID)
 
-	orderRedisRepository.EXPECT().GetByIDCtx(gomock.Any(), mockOrder.OrderID.String()).AnyTimes().Return(nil, redis.Nil)
+	orderRedisRepository.EXPECT().GetByIdCtx(gomock.Any(), mockOrder.OrderID.String()).AnyTimes().Return(nil, redis.Nil)
 }
 
 func TestOrderUseCase_CachedFindById(t *testing.T) {
@@ -341,7 +341,7 @@ func TestOrderUseCase_CachedFindById(t *testing.T) {
 
 	ctx := context.Background()
 
-	orderRedisRepository.EXPECT().GetByIDCtx(gomock.Any(), mockOrder.OrderID.String()).AnyTimes().Return(nil, redis.Nil)
+	orderRedisRepository.EXPECT().GetByIdCtx(gomock.Any(), mockOrder.OrderID.String()).AnyTimes().Return(nil, redis.Nil)
 	orderPGRepository.EXPECT().FindById(gomock.Any(), mockOrder.OrderID).Return(mockOrder, nil)
 	orderRedisRepository.EXPECT().SetOrderCtx(gomock.Any(), mockOrder.OrderID.String(), 3600, mockOrder).AnyTimes().Return(nil)
 
@@ -441,5 +441,5 @@ func TestOrderUseCase_DeleteById(t *testing.T) {
 	require.NoError(t, err)
 
 	orderPGRepository.EXPECT().FindById(gomock.Any(), mockOrder.OrderID).AnyTimes().Return(nil, nil)
-	orderRedisRepository.EXPECT().GetByIDCtx(gomock.Any(), mockOrder.OrderID.String()).AnyTimes().Return(nil, redis.Nil)
+	orderRedisRepository.EXPECT().GetByIdCtx(gomock.Any(), mockOrder.OrderID.String()).AnyTimes().Return(nil, redis.Nil)
 }

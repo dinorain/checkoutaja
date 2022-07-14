@@ -41,12 +41,12 @@ func TestOrderRedisRepo_SetOrderCtx(t *testing.T) {
 	})
 }
 
-func TestOrderRedisRepo_GetByIDCtx(t *testing.T) {
+func TestOrderRedisRepo_GetByIdCtx(t *testing.T) {
 	t.Parallel()
 
 	redisRepo := SetupRedis()
 
-	t.Run("GetByIDCtx", func(t *testing.T) {
+	t.Run("GetByIdCtx", func(t *testing.T) {
 		order := &models.Order{
 			OrderID: uuid.New(),
 		}
@@ -54,7 +54,7 @@ func TestOrderRedisRepo_GetByIDCtx(t *testing.T) {
 		err := redisRepo.SetOrderCtx(context.Background(), redisRepo.createKey(order.OrderID.String()), 10, order)
 		require.NoError(t, err)
 
-		order, err = redisRepo.GetByIDCtx(context.Background(), redisRepo.createKey(order.OrderID.String()))
+		order, err = redisRepo.GetByIdCtx(context.Background(), redisRepo.createKey(order.OrderID.String()))
 		require.NoError(t, err)
 		require.NotNil(t, order)
 	})

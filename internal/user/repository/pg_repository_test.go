@@ -202,7 +202,7 @@ func TestUserRepository_FindById(t *testing.T) {
 		time.Now(),
 	)
 
-	mock.ExpectQuery(findByIDQuery).WithArgs(mockUser.UserID).WillReturnRows(rows)
+	mock.ExpectQuery(findByIdQuery).WithArgs(mockUser.UserID).WillReturnRows(rows)
 
 	foundUser, err := userPGRepository.FindById(context.Background(), mockUser.UserID)
 	require.NoError(t, err)
@@ -249,7 +249,7 @@ func TestUserRepository_UpdateById(t *testing.T) {
 	)
 
 	mockUser.FirstName = "FirstNameChanged"
-	mock.ExpectExec(updateByIDQuery).WithArgs(
+	mock.ExpectExec(updateByIdQuery).WithArgs(
 		mockUser.UserID,
 		mockUser.FirstName,
 		mockUser.LastName,
@@ -305,7 +305,7 @@ func TestUserRepository_DeleteById(t *testing.T) {
 		time.Now(),
 	)
 
-	mock.ExpectExec(deleteByIDQuery).WithArgs(mockUser.UserID).WillReturnResult(sqlmock.NewResult(0, 1))
+	mock.ExpectExec(deleteByIdQuery).WithArgs(mockUser.UserID).WillReturnResult(sqlmock.NewResult(0, 1))
 
 	err = userPGRepository.DeleteById(context.Background(), mockUser.UserID)
 	require.NoError(t, err)

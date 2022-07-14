@@ -144,7 +144,7 @@ func TestProductUseCase_FindById(t *testing.T) {
 
 	ctx := context.Background()
 
-	productRedisRepository.EXPECT().GetByIDCtx(gomock.Any(), mockProduct.ProductID.String()).AnyTimes().Return(nil, redis.Nil)
+	productRedisRepository.EXPECT().GetByIdCtx(gomock.Any(), mockProduct.ProductID.String()).AnyTimes().Return(nil, redis.Nil)
 	productPGRepository.EXPECT().FindById(gomock.Any(), mockProduct.ProductID).Return(mockProduct, nil)
 
 	product, err := productUC.FindById(ctx, mockProduct.ProductID)
@@ -152,7 +152,7 @@ func TestProductUseCase_FindById(t *testing.T) {
 	require.NotNil(t, product)
 	require.Equal(t, product.ProductID, mockProduct.ProductID)
 
-	productRedisRepository.EXPECT().GetByIDCtx(gomock.Any(), mockProduct.ProductID.String()).AnyTimes().Return(nil, redis.Nil)
+	productRedisRepository.EXPECT().GetByIdCtx(gomock.Any(), mockProduct.ProductID.String()).AnyTimes().Return(nil, redis.Nil)
 }
 
 func TestProductUseCase_CachedFindById(t *testing.T) {
@@ -180,7 +180,7 @@ func TestProductUseCase_CachedFindById(t *testing.T) {
 
 	ctx := context.Background()
 
-	productRedisRepository.EXPECT().GetByIDCtx(gomock.Any(), mockProduct.ProductID.String()).AnyTimes().Return(nil, redis.Nil)
+	productRedisRepository.EXPECT().GetByIdCtx(gomock.Any(), mockProduct.ProductID.String()).AnyTimes().Return(nil, redis.Nil)
 	productPGRepository.EXPECT().FindById(gomock.Any(), mockProduct.ProductID).Return(mockProduct, nil)
 	productRedisRepository.EXPECT().SetProductCtx(gomock.Any(), mockProduct.ProductID.String(), 3600, mockProduct).AnyTimes().Return(nil)
 
@@ -256,5 +256,5 @@ func TestProductUseCase_DeleteById(t *testing.T) {
 	require.NoError(t, err)
 
 	productPGRepository.EXPECT().FindById(gomock.Any(), mockProduct.ProductID).AnyTimes().Return(nil, nil)
-	productRedisRepository.EXPECT().GetByIDCtx(gomock.Any(), mockProduct.ProductID.String()).AnyTimes().Return(nil, redis.Nil)
+	productRedisRepository.EXPECT().GetByIdCtx(gomock.Any(), mockProduct.ProductID.String()).AnyTimes().Return(nil, redis.Nil)
 }

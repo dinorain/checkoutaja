@@ -5,7 +5,7 @@ func (h *orderHandlersHTTP) OrderMapRoutes() {
 	h.group.GET("", h.FindAll())
 	h.group.POST("", h.Create(), h.mw.IsUser)
 
-	h.group.GET("/:id", h.FindByID())
-	h.group.POST("/:id", h.AcceptByID(), h.mw.IsSeller)
-	h.group.DELETE("/:id", h.DeleteByID(), h.mw.IsAdmin)
+	h.group.GET("/:id", h.FindById())
+	h.group.POST("/:id", h.AcceptById(), h.mw.IsSeller)
+	h.group.DELETE("/:id", h.DeleteById(), h.mw.IsAdmin)
 }

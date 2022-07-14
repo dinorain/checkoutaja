@@ -9,7 +9,7 @@ import (
 
 // Seller Redis repository interface
 type SellerRedisRepository interface {
-	GetByIDCtx(ctx context.Context, key string) (*models.Seller, error)
+	GetByIdCtx(ctx context.Context, key string) (*models.Seller, error)
 	SetSellerCtx(ctx context.Context, key string, seconds int, user *models.Seller) error
 	DeleteSellerCtx(ctx context.Context, key string) error
 }

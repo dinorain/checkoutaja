@@ -184,7 +184,7 @@ func TestSellerUseCase_FindById(t *testing.T) {
 
 	ctx := context.Background()
 
-	sellerRedisRepository.EXPECT().GetByIDCtx(gomock.Any(), mockSeller.SellerID.String()).AnyTimes().Return(nil, redis.Nil)
+	sellerRedisRepository.EXPECT().GetByIdCtx(gomock.Any(), mockSeller.SellerID.String()).AnyTimes().Return(nil, redis.Nil)
 	sellerPGRepository.EXPECT().FindById(gomock.Any(), mockSeller.SellerID).Return(mockSeller, nil)
 
 	seller, err := sellerUC.FindById(ctx, mockSeller.SellerID)
@@ -192,7 +192,7 @@ func TestSellerUseCase_FindById(t *testing.T) {
 	require.NotNil(t, seller)
 	require.Equal(t, seller.SellerID, mockSeller.SellerID)
 
-	sellerRedisRepository.EXPECT().GetByIDCtx(gomock.Any(), mockSeller.SellerID.String()).AnyTimes().Return(nil, redis.Nil)
+	sellerRedisRepository.EXPECT().GetByIdCtx(gomock.Any(), mockSeller.SellerID.String()).AnyTimes().Return(nil, redis.Nil)
 }
 
 func TestSellerUseCase_CachedFindById(t *testing.T) {
@@ -221,7 +221,7 @@ func TestSellerUseCase_CachedFindById(t *testing.T) {
 
 	ctx := context.Background()
 
-	sellerRedisRepository.EXPECT().GetByIDCtx(gomock.Any(), mockSeller.SellerID.String()).AnyTimes().Return(nil, redis.Nil)
+	sellerRedisRepository.EXPECT().GetByIdCtx(gomock.Any(), mockSeller.SellerID.String()).AnyTimes().Return(nil, redis.Nil)
 	sellerPGRepository.EXPECT().FindById(gomock.Any(), mockSeller.SellerID).Return(mockSeller, nil)
 	sellerRedisRepository.EXPECT().SetSellerCtx(gomock.Any(), mockSeller.SellerID.String(), 3600, mockSeller).AnyTimes().Return(nil)
 
@@ -299,7 +299,7 @@ func TestSellerUseCase_DeleteById(t *testing.T) {
 	require.NoError(t, err)
 
 	sellerPGRepository.EXPECT().FindById(gomock.Any(), mockSeller.SellerID).AnyTimes().Return(nil, nil)
-	sellerRedisRepository.EXPECT().GetByIDCtx(gomock.Any(), mockSeller.SellerID.String()).AnyTimes().Return(nil, redis.Nil)
+	sellerRedisRepository.EXPECT().GetByIdCtx(gomock.Any(), mockSeller.SellerID.String()).AnyTimes().Return(nil, redis.Nil)
 }
 
 func TestSellerUseCase_GenerateTokenPair(t *testing.T) {

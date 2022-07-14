@@ -28,7 +28,7 @@ func NewProductRedisRepo(redisClient *redis.Client, logger logger.Logger) *produ
 }
 
 // Get product by id
-func (r *productRedisRepo) GetByIDCtx(ctx context.Context, key string) (*models.Product, error) {
+func (r *productRedisRepo) GetByIdCtx(ctx context.Context, key string) (*models.Product, error) {
 	productBytes, err := r.redisClient.Get(ctx, r.createKey(key)).Bytes()
 	if err != nil {
 		return nil, err

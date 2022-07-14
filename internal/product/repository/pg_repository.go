@@ -46,7 +46,7 @@ func (r *ProductRepository) Create(ctx context.Context, product *models.Product)
 func (r *ProductRepository) UpdateById(ctx context.Context, product *models.Product) (*models.Product, error) {
 	if res, err := r.db.ExecContext(
 		ctx,
-		updateByIDQuery,
+		updateByIdQuery,
 		product.ProductID,
 		product.Name,
 		product.Description,
@@ -77,7 +77,7 @@ func (r *ProductRepository) FindAll(ctx context.Context, pagination *utils.Pagin
 // FindAllBySellerId Find products by seller uuid
 func (r *ProductRepository) FindAllBySellerId(ctx context.Context, sellerID uuid.UUID, pagination *utils.Pagination) ([]models.Product, error) {
 	var products []models.Product
-	if err := r.db.SelectContext(ctx, &products, findAllBySellerIDQuery, sellerID, pagination.GetLimit(), pagination.GetOffset()); err != nil {
+	if err := r.db.SelectContext(ctx, &products, findAllBySellerIdQuery, sellerID, pagination.GetLimit(), pagination.GetOffset()); err != nil {
 		return nil, errors.Wrap(err, "ProductPGRepository.FindAllBySellerId.SelectContext")
 	}
 
@@ -87,7 +87,7 @@ func (r *ProductRepository) FindAllBySellerId(ctx context.Context, sellerID uuid
 // FindById Find product by uuid
 func (r *ProductRepository) FindById(ctx context.Context, productID uuid.UUID) (*models.Product, error) {
 	product := &models.Product{}
-	if err := r.db.GetContext(ctx, product, findByIDQuery, productID); err != nil {
+	if err := r.db.GetContext(ctx, product, findByIdQuery, productID); err != nil {
 		return nil, errors.Wrap(err, "ProductRepository.FindById.GetContext")
 	}
 
@@ -96,7 +96,7 @@ func (r *ProductRepository) FindById(ctx context.Context, productID uuid.UUID) (
 
 // DeleteById Find product by uuid
 func (r *ProductRepository) DeleteById(ctx context.Context, productID uuid.UUID) error {
-	if res, err := r.db.ExecContext(ctx, deleteByIDQuery, productID); err != nil {
+	if res, err := r.db.ExecContext(ctx, deleteByIdQuery, productID); err != nil {
 		return errors.Wrap(err, "ProductRepository.DeleteById.ExecContext")
 	} else {
 		cnt, err := res.RowsAffected()

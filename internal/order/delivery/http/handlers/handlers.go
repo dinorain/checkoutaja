@@ -85,9 +85,9 @@ func (h *orderHandlersHTTP) Create() echo.HandlerFunc {
 			return httpErrors.ErrorCtxResponse(c, err, h.cfg.Http.DebugErrorsResponse)
 		}
 
-		session, err := h.sessUC.GetSessionByID(ctx, sessID)
+		session, err := h.sessUC.GetSessionById(ctx, sessID)
 		if err != nil {
-			h.logger.Errorf("sessUC.GetSessionByID: %v", err)
+			h.logger.Errorf("sessUC.GetSessionById: %v", err)
 			if errors.Is(err, redis.Nil) {
 				return httpErrors.NewUnauthorizedError(c, nil, h.cfg.Http.DebugErrorsResponse)
 			}
@@ -186,7 +186,7 @@ func (h *orderHandlersHTTP) FindAll() echo.HandlerFunc {
 	}
 }
 
-// FindByID
+// FindById
 // @Tags Orders
 // @Summary Find order
 // @Description Find existing order by id
@@ -195,7 +195,7 @@ func (h *orderHandlersHTTP) FindAll() echo.HandlerFunc {
 // @Security ApiKeyAuth
 // @Success 200 {object} dto.OrderResponseDto
 // @Router /order/{id} [get]
-func (h *orderHandlersHTTP) FindByID() echo.HandlerFunc {
+func (h *orderHandlersHTTP) FindById() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		ctx := c.Request().Context()
 
@@ -215,7 +215,7 @@ func (h *orderHandlersHTTP) FindByID() echo.HandlerFunc {
 	}
 }
 
-// AcceptByID
+// AcceptById
 // @Tags Orders
 // @Summary Accept order
 // @Description Seller accept order
@@ -225,7 +225,7 @@ func (h *orderHandlersHTTP) FindByID() echo.HandlerFunc {
 // @Param id path string true "Order ID"
 // @Success 200 {object} dto.OrderResponseDto
 // @Router /order/{id} [put]
-func (h *orderHandlersHTTP) AcceptByID() echo.HandlerFunc {
+func (h *orderHandlersHTTP) AcceptById() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		ctx := c.Request().Context()
 
@@ -261,7 +261,7 @@ func (h *orderHandlersHTTP) AcceptByID() echo.HandlerFunc {
 	}
 }
 
-// DeleteByID
+// DeleteById
 // @Tags Orders
 // @Summary Delete order
 // @Description Delete existing order, admin only
@@ -271,7 +271,7 @@ func (h *orderHandlersHTTP) AcceptByID() echo.HandlerFunc {
 // @Success 200 {object} nil
 // @Param id path string true "Order ID"
 // @Router /order/{id} [delete]
-func (h *orderHandlersHTTP) DeleteByID() echo.HandlerFunc {
+func (h *orderHandlersHTTP) DeleteById() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		ctx := c.Request().Context()
 

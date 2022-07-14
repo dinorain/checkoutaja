@@ -9,7 +9,7 @@ import (
 
 // Order Redis repository interface
 type OrderRedisRepository interface {
-	GetByIDCtx(ctx context.Context, key string) (*models.Order, error)
+	GetByIdCtx(ctx context.Context, key string) (*models.Order, error)
 	SetOrderCtx(ctx context.Context, key string, seconds int, user *models.Order) error
 	DeleteOrderCtx(ctx context.Context, key string) error
 }
