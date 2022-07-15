@@ -38,47 +38,47 @@ func (m *MockProductUseCase) EXPECT() *MockProductUseCaseMockRecorder {
 }
 
 // CachedFindById mocks base method.
-func (m *MockProductUseCase) CachedFindById(ctx context.Context, userID uuid.UUID) (*models.Product, error) {
+func (m *MockProductUseCase) CachedFindById(ctx context.Context, productID uuid.UUID) (*models.Product, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CachedFindById", ctx, userID)
+	ret := m.ctrl.Call(m, "CachedFindById", ctx, productID)
 	ret0, _ := ret[0].(*models.Product)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // CachedFindById indicates an expected call of CachedFindById.
-func (mr *MockProductUseCaseMockRecorder) CachedFindById(ctx, userID interface{}) *gomock.Call {
+func (mr *MockProductUseCaseMockRecorder) CachedFindById(ctx, productID interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CachedFindById", reflect.TypeOf((*MockProductUseCase)(nil).CachedFindById), ctx, userID)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CachedFindById", reflect.TypeOf((*MockProductUseCase)(nil).CachedFindById), ctx, productID)
 }
 
 // Create mocks base method.
-func (m *MockProductUseCase) Create(ctx context.Context, user *models.Product) (*models.Product, error) {
+func (m *MockProductUseCase) Create(ctx context.Context, product *models.Product) (*models.Product, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Create", ctx, user)
+	ret := m.ctrl.Call(m, "Create", ctx, product)
 	ret0, _ := ret[0].(*models.Product)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // Create indicates an expected call of Create.
-func (mr *MockProductUseCaseMockRecorder) Create(ctx, user interface{}) *gomock.Call {
+func (mr *MockProductUseCaseMockRecorder) Create(ctx, product interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockProductUseCase)(nil).Create), ctx, user)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockProductUseCase)(nil).Create), ctx, product)
 }
 
 // DeleteById mocks base method.
-func (m *MockProductUseCase) DeleteById(ctx context.Context, userID uuid.UUID) error {
+func (m *MockProductUseCase) DeleteById(ctx context.Context, productID uuid.UUID) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "DeleteById", ctx, userID)
+	ret := m.ctrl.Call(m, "DeleteById", ctx, productID)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // DeleteById indicates an expected call of DeleteById.
-func (mr *MockProductUseCaseMockRecorder) DeleteById(ctx, userID interface{}) *gomock.Call {
+func (mr *MockProductUseCaseMockRecorder) DeleteById(ctx, productID interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteById", reflect.TypeOf((*MockProductUseCase)(nil).DeleteById), ctx, userID)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteById", reflect.TypeOf((*MockProductUseCase)(nil).DeleteById), ctx, productID)
 }
 
 // FindAll mocks base method.
@@ -112,31 +112,31 @@ func (mr *MockProductUseCaseMockRecorder) FindAllBySellerId(ctx, sellerID, pagin
 }
 
 // FindById mocks base method.
-func (m *MockProductUseCase) FindById(ctx context.Context, userID uuid.UUID) (*models.Product, error) {
+func (m *MockProductUseCase) FindById(ctx context.Context, productID uuid.UUID) (*models.Product, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindById", ctx, userID)
+	ret := m.ctrl.Call(m, "FindById", ctx, productID)
 	ret0, _ := ret[0].(*models.Product)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // FindById indicates an expected call of FindById.
-func (mr *MockProductUseCaseMockRecorder) FindById(ctx, userID interface{}) *gomock.Call {
+func (mr *MockProductUseCaseMockRecorder) FindById(ctx, productID interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindById", reflect.TypeOf((*MockProductUseCase)(nil).FindById), ctx, userID)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindById", reflect.TypeOf((*MockProductUseCase)(nil).FindById), ctx, productID)
 }
 
 // UpdateById mocks base method.
-func (m *MockProductUseCase) UpdateById(ctx context.Context, user *models.Product) (*models.Product, error) {
+func (m *MockProductUseCase) UpdateById(ctx context.Context, product *models.Product) (*models.Product, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "UpdateById", ctx, user)
+	ret := m.ctrl.Call(m, "UpdateById", ctx, product)
 	ret0, _ := ret[0].(*models.Product)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // UpdateById indicates an expected call of UpdateById.
-func (mr *MockProductUseCaseMockRecorder) UpdateById(ctx, user interface{}) *gomock.Call {
+func (mr *MockProductUseCaseMockRecorder) UpdateById(ctx, product interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateById", reflect.TypeOf((*MockProductUseCase)(nil).UpdateById), ctx, user)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateById", reflect.TypeOf((*MockProductUseCase)(nil).UpdateById), ctx, product)
 }

@@ -2,7 +2,7 @@ package seller
 
 import "github.com/labstack/echo/v4"
 
-// User HTTP Handlers interface
+// Seller HTTP Handlers interface
 type SellerHandlers interface {
 	Register() echo.HandlerFunc
 	Login() echo.HandlerFunc

@@ -27,7 +27,7 @@ import (
 	"github.com/dinorain/checkoutaja/pkg/logger"
 )
 
-func TestSellersService_Register(t *testing.T) {
+func TestSellersHandler_Register(t *testing.T) {
 	t.Parallel()
 
 	ctrl := gomock.NewController(t)
@@ -72,7 +72,7 @@ func TestSellersService_Register(t *testing.T) {
 	require.Equal(t, buf.String(), res.Body.String())
 }
 
-func TestSellersService_Login(t *testing.T) {
+func TestSellersHandler_Login(t *testing.T) {
 	t.Parallel()
 
 	ctrl := gomock.NewController(t)
@@ -118,7 +118,7 @@ func TestSellersService_Login(t *testing.T) {
 	require.Equal(t, http.StatusCreated, res.Code)
 }
 
-func TestSellersService_FindAll(t *testing.T) {
+func TestSellersHandler_FindAll(t *testing.T) {
 	t.Parallel()
 
 	ctrl := gomock.NewController(t)
@@ -155,7 +155,7 @@ func TestSellersService_FindAll(t *testing.T) {
 	require.Equal(t, http.StatusOK, res.Code)
 }
 
-func TestSellersService_FindById(t *testing.T) {
+func TestSellersHandler_FindById(t *testing.T) {
 	t.Parallel()
 
 	ctrl := gomock.NewController(t)
@@ -185,7 +185,7 @@ func TestSellersService_FindById(t *testing.T) {
 	require.Equal(t, http.StatusOK, res.Code)
 }
 
-func TestSellersService_UpdateById(t *testing.T) {
+func TestSellersHandler_UpdateById(t *testing.T) {
 	t.Parallel()
 
 	ctrl := gomock.NewController(t)
@@ -220,7 +220,6 @@ func TestSellersService_UpdateById(t *testing.T) {
 	claims := token.Claims.(jwt.MapClaims)
 	claims["session_id"] = uuid.New().String()
 	claims["seller_id"] = sellerUUID.String()
-	claims["role"] = "seller"
 	claims["exp"] = time.Now().Add(time.Minute * 15).Unix()
 	validToken, _ := token.SignedString([]byte("secret"))
 
@@ -272,7 +271,7 @@ func TestSellersService_UpdateById(t *testing.T) {
 	})
 }
 
-func TestSellersService_DeleteById(t *testing.T) {
+func TestSellersHandler_DeleteById(t *testing.T) {
 	t.Parallel()
 
 	ctrl := gomock.NewController(t)
@@ -303,7 +302,7 @@ func TestSellersService_DeleteById(t *testing.T) {
 	require.Equal(t, http.StatusOK, res.Code)
 }
 
-func TestSellersService_GetMe(t *testing.T) {
+func TestSellersHandler_GetMe(t *testing.T) {
 	t.Parallel()
 
 	ctrl := gomock.NewController(t)
@@ -350,7 +349,7 @@ func TestSellersService_GetMe(t *testing.T) {
 	require.Equal(t, http.StatusOK, res.Code)
 }
 
-func TestSellersService_Logout(t *testing.T) {
+func TestSellersHandler_Logout(t *testing.T) {
 	t.Parallel()
 
 	ctrl := gomock.NewController(t)
@@ -395,7 +394,7 @@ func TestSellersService_Logout(t *testing.T) {
 	require.Equal(t, http.StatusOK, res.Code)
 }
 
-func TestSellersService_RefreshToken(t *testing.T) {
+func TestSellersHandler_RefreshToken(t *testing.T) {
 	t.Parallel()
 
 	ctrl := gomock.NewController(t)

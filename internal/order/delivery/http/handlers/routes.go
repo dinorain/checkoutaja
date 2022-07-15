@@ -1,4 +1,4 @@
-package http
+package handlers
 
 func (h *orderHandlersHTTP) OrderMapRoutes() {
 	h.group.Use(h.mw.IsLoggedIn())
@@ -7,5 +7,4 @@ func (h *orderHandlersHTTP) OrderMapRoutes() {
 
 	h.group.GET("/:id", h.FindById())
 	h.group.POST("/:id", h.AcceptById(), h.mw.IsSeller)
-	h.group.DELETE("/:id", h.DeleteById(), h.mw.IsAdmin)
 }
