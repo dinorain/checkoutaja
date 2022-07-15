@@ -1,4 +1,4 @@
-package http
+package handlers
 
 import (
 	"errors"
@@ -32,6 +32,8 @@ type productHandlersHTTP struct {
 	productUC product.ProductUseCase
 	sessUC    session.SessUseCase
 }
+
+var _ product.ProductHandlers = (*productHandlersHTTP)(nil)
 
 func NewProductHandlersHTTP(
 	group *echo.Group,
@@ -218,6 +220,16 @@ func (h *productHandlersHTTP) UpdateById() echo.HandlerFunc {
 			return httpErrors.ErrorCtxResponse(c, err, h.cfg.Http.DebugErrorsResponse)
 		}
 
+		_, userID, role, err := h.getSessionIDFromCtx(c)
+		if err != nil {
+			h.logger.Errorf("getSessionIDFromCtx: %v", err)
+			return httpErrors.ErrorCtxResponse(c, err, h.cfg.Http.DebugErrorsResponse)
+		}
+
+		if role == "" && userID != product.SellerID.String() {
+			return httpErrors.NewForbiddenError(c, nil, h.cfg.Http.DebugErrorsResponse)
+		}
+
 		product, err = h.updateReqToProductModel(product, updateDto)
 		if err != nil {
 			h.logger.Errorf("updateReqToProductModel: %v", err)
@@ -252,6 +264,22 @@ func (h *productHandlersHTTP) DeleteById() echo.HandlerFunc {
 		if err != nil {
 			h.logger.WarnMsg("uuid.FromString", err)
 			return httpErrors.ErrorCtxResponse(c, err, h.cfg.Http.DebugErrorsResponse)
+		}
+
+		_, userID, role, err := h.getSessionIDFromCtx(c)
+		if err != nil {
+			h.logger.Errorf("getSessionIDFromCtx: %v", err)
+			return httpErrors.ErrorCtxResponse(c, err, h.cfg.Http.DebugErrorsResponse)
+		}
+
+		product, err := h.productUC.CachedFindById(ctx, productUUID)
+		if err != nil {
+			h.logger.Errorf("productUC.CachedFindById: %v", err)
+			return httpErrors.ErrorCtxResponse(c, err, h.cfg.Http.DebugErrorsResponse)
+		}
+
+		if role == "" && userID != product.SellerID.String() {
+			return httpErrors.NewForbiddenError(c, nil, h.cfg.Http.DebugErrorsResponse)
 		}
 
 		if err := h.productUC.DeleteById(ctx, productUUID); err != nil {

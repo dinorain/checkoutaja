@@ -1,4 +1,4 @@
-package http
+package handlers
 
 func (h *productHandlersHTTP) ProductMapRoutes() {
 	h.group.Use(h.mw.IsLoggedIn())

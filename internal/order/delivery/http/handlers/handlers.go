@@ -1,4 +1,4 @@
-package http
+package handlers
 
 import (
 	"errors"
@@ -38,6 +38,8 @@ type orderHandlersHTTP struct {
 	productUC product.ProductUseCase
 	sessUC    session.SessUseCase
 }
+
+var _ order.OrderHandlers = (*orderHandlersHTTP)(nil)
 
 func NewOrderHandlersHTTP(
 	group *echo.Group,
@@ -245,6 +247,20 @@ func (h *orderHandlersHTTP) AcceptById() echo.HandlerFunc {
 			return httpErrors.ErrorCtxResponse(c, err, h.cfg.Http.DebugErrorsResponse)
 		}
 
+		_, userID, role, err := h.getSessionIDFromCtx(c)
+		if err != nil {
+			h.logger.Errorf("getSessionIDFromCtx: %v", err)
+			return httpErrors.ErrorCtxResponse(c, err, h.cfg.Http.DebugErrorsResponse)
+		}
+
+		if role != "" {
+			return httpErrors.NewForbiddenError(c, nil, h.cfg.Http.DebugErrorsResponse)
+		}
+
+		if userID != order.SellerID.String() {
+			return httpErrors.NewForbiddenError(c, nil, h.cfg.Http.DebugErrorsResponse)
+		}
+
 		order, err = h.updateReqToOrderModel(order, updateDto)
 		if err != nil {
 			h.logger.Errorf("orderHandlersHTTP.updateReqToOrderModel: %v", err)
@@ -258,35 +274,6 @@ func (h *orderHandlersHTTP) AcceptById() echo.HandlerFunc {
 		}
 
 		return c.JSON(http.StatusOK, dto.OrderResponseFromModel(order))
-	}
-}
-
-// DeleteById
-// @Tags Orders
-// @Summary Delete order
-// @Description Delete existing order, admin only
-// @Accept json
-// @Produce json
-// @Security ApiKeyAuth
-// @Success 200 {object} nil
-// @Param id path string true "Order ID"
-// @Router /order/{id} [delete]
-func (h *orderHandlersHTTP) DeleteById() echo.HandlerFunc {
-	return func(c echo.Context) error {
-		ctx := c.Request().Context()
-
-		orderUUID, err := uuid.Parse(c.Param("id"))
-		if err != nil {
-			h.logger.WarnMsg("uuid.FromString", err)
-			return httpErrors.ErrorCtxResponse(c, err, h.cfg.Http.DebugErrorsResponse)
-		}
-
-		if err := h.orderUC.DeleteById(ctx, orderUUID); err != nil {
-			h.logger.Errorf("orderUC.DeleteById: %v", err)
-			return httpErrors.ErrorCtxResponse(c, err, h.cfg.Http.DebugErrorsResponse)
-		}
-
-		return c.JSON(http.StatusOK, nil)
 	}
 }
 
