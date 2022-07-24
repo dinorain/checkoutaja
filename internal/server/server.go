@@ -58,9 +58,6 @@ func NewAppServer(logger logger.Logger, cfg *config.Config, db *sqlx.DB, redisCl
 
 // Run service
 func (s *Server) Run() error {
-	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM, syscall.SIGINT)
-	defer cancel()
-
 	s.mw = middlewares.NewMiddlewareManager(s.logger, s.cfg)
 
 	userRepo := userRepository.NewUserPGRepository(s.db)
@@ -97,6 +94,9 @@ func (s *Server) Run() error {
 
 	orderHandlers := orderDeliveryHTTP.NewOrderHandlersHTTP(s.echo.Group("order"), s.logger, s.cfg, s.mw, s.v, orderUC, userUC, sellerUC, productUC, sessUC)
 	orderHandlers.OrderMapRoutes()
+
+	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM, syscall.SIGINT)
+	defer cancel()
 
 	go func() {
 		if err := s.runHttpServer(); err != nil {
