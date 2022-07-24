@@ -15,8 +15,8 @@
 * [Docker](https://www.docker.com/) - Docker
 
 #### Docker compose files:
-    docker-compose.local.yml - run postgresql, redis, aws, prometheus, grafana containers
-    docker-compose.dev.yml - run all in docker
+    docker-compose.local.yml
+    docker-compose.dev.yml
 
 ### Docker development usage:
     make develop
