@@ -12,12 +12,12 @@ import (
 
 // Order pg repository
 type OrderPGRepository interface {
-	Create(ctx context.Context, user *models.Order) (*models.Order, error)
+	Create(ctx context.Context, order *models.Order) (*models.Order, error)
 	FindAll(ctx context.Context, pagination *utils.Pagination) ([]models.Order, error)
-	FindAllByUserId(ctx context.Context, userID uuid.UUID, pagination *utils.Pagination) ([]models.Order, error)
+	FindAllByUserId(ctx context.Context, orderID uuid.UUID, pagination *utils.Pagination) ([]models.Order, error)
 	FindAllBySellerId(ctx context.Context, sellerID uuid.UUID, pagination *utils.Pagination) ([]models.Order, error)
-	FindAllByUserIdSellerId(ctx context.Context, userID uuid.UUID, sellerID uuid.UUID, pagination *utils.Pagination) ([]models.Order, error)
-	FindById(ctx context.Context, userID uuid.UUID) (*models.Order, error)
-	UpdateById(ctx context.Context, user *models.Order) (*models.Order, error)
-	DeleteById(ctx context.Context, userID uuid.UUID) error
+	FindAllByUserIdSellerId(ctx context.Context, orderID uuid.UUID, sellerID uuid.UUID, pagination *utils.Pagination) ([]models.Order, error)
+	FindById(ctx context.Context, orderID uuid.UUID) (*models.Order, error)
+	UpdateById(ctx context.Context, order *models.Order) (*models.Order, error)
+	DeleteById(ctx context.Context, orderID uuid.UUID) error
 }

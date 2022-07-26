@@ -46,5 +46,5 @@ func (o *OrderItem) Scan(value interface{}) error {
 
 func (o OrderItem) Value() (driver.Value, error) {
 	valueJson, _ := json.Marshal(o)
-	return string(valueJson), nil
+	return valueJson, nil
 }
